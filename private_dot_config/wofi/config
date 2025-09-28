@@ -1,6 +1,5 @@
 key_expand=Alt-Return
 
-
 allow_images = true
 image_size = 25
 prompt=Search...
