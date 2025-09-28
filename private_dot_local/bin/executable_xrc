@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# xinput list
+# xinput list-props
+# for X1 carbon touchpad. enable natural scroling and tap
+if xinput list | grep -q 'SYNA8005:00 06CB:CD8C Touchpad'; then
+    xinput set-prop 13 332 1
+    xinput set-prop 13 353 1
+fi

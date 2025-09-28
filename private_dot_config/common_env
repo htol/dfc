@@ -1,0 +1,34 @@
+export COMMON_ENV_LOADED=1
+export EDITOR=nvim
+export TERMINFO=$HOME/.config/terminfo
+
+### Config for using vagrant with virtual box from WSL
+export GEM_HOME="$HOME/.local/gem" # TODO: work very strange. need further investigation
+export VAGRANT_HOME="$HOME/.local/vagrant.d"
+export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
+# export PATH="$PATH:/mnt/c/Program Files/Oracle/VirtualBox"
+
+export DOCKER_CONFIG="$HOME/.config/docker"
+
+export ZDOTDIR="$HOME/.config/zsh"
+export XDG_CONFIG_HOME="$HOME/.config"
+export HISTFILE="$ZDOTDIR/.zsh_history"
+
+export IPYTHONDIR="$HOME/.local/ipython"
+
+export NPM_CONFIG_USERCONFIG="$HOME/.config/npm/npmrc"
+export KEYCHAIN_DIR="$HOME/.cache/keychain"
+
+export GOPATH="$HOME/go"
+export GO111MODULE=on
+
+export FNM_DIR="$HOME/.local/fnm"
+export SDKMAN_DIR="$HOME/.local/sdkman"
+export BUN_INSTALL="$HOME/.local/bun"
+export PROTO_HOME="$HOME/.local/proto"
+
+
+export RUSTUP_HOME="$HOME/.local/rustup"
+export CARGO_HOME="$HOME/.local/cargo"
+
+export PATH="$PROTO_HOME/bin:$PROTO_HOME/shims:$CARGO_HOME/bin:$HOME/.local/bin:~/bin:$GOPATH/bin:$GOROOT/bin:$BUN_INSTALL/bin:$PATH"

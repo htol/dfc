@@ -1,0 +1,17 @@
+{
+	"auths": {
+{{- if index . "is_work" }}
+		"{{ .work_docker_registry }}": {}
+{{- else }}
+		"registry-1.docker.io": {}
+{{- end }}
+	},
+{{- if eq .chezmoi.os "darwin" }}
+	"credsStore": "osxkeychain",
+	"cliPluginsExtraDirs": [
+		"/opt/homebrew/lib/docker/cli-plugins"
+	]
+{{- else }}
+	"credsStore": "secretservice"
+{{- end }}
+}

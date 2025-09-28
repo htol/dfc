@@ -1,0 +1,12 @@
+{{ if ne .chezmoi.os "windows" }}
+custom-checks.ps1
+{{ end }}
+
+{{- if ne .chezmoi.os "linux" }}
+.config/waybar/**
+.config/hypr/**
+.config/i3/**
+.config/wofi/**
+.local/bin/hypr-session-helper.sh
+.local/bin/xrc
+{{- end }}

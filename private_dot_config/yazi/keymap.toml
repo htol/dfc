@@ -1,0 +1,4 @@
+[mgr]
+prepend_keymap = [
+    { on = "<A-a>", run = "plugin chezmoi", desc = "Toggle chezmoi management" },
+]

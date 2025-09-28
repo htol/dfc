@@ -1,0 +1,4 @@
+#!/bin/bash
+DST="/mnt/c/Users/{{ yadm.user }}/AppData/Roaming/alacritty"
+mkdir -p $DST
+cp ~/.config/alacritty/alacritty.yml $DST

@@ -1,0 +1,29 @@
+// -*- mode: jsonc -*-
+{
+  "reload_style_on_change": true,
+  "layer": "top",
+  "position": "top",
+  "height": 25,
+  "spacing": 2,
+  "modules-left": [
+    "custom/arch",
+    "hyprland/workspaces"
+  ],
+  "modules-center": [
+    "hyprland/window"
+  ],
+  "modules-right": [
+    "tray",
+    "idle_inhibitor",
+    "pulseaudio",
+    "temperature",
+    "battery",
+    "hyprland/language",
+    "clock",
+    "custom/hyprwhspr"
+  ],
+  "include": [
+    "~/.config/waybar/modules.json",
+    "~/.config/waybar/hyprwhspr-module.jsonc"
+  ]
+}

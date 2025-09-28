@@ -1,0 +1,8 @@
+function sshcert --description "Get SSH certs with password from 1Password, then Yubikey"
+    expect -c '
+        spawn ssh '"$argv[1..]"'
+        expect "*assword:*"
+        send "[exec op read {{ index . "op_password_path" | default "-= CHANGE ME =-" }}]\r"
+        interact
+    '
+end

@@ -1,0 +1,10 @@
+[plugin]
+fetchers = [
+    # Defaults (required for file type detection and preview)
+    { id = "mime", url = "*/",         run = "mime.dir",    prio = "high" },
+    { id = "mime", url = "local://*",  run = "mime.local",  prio = "high" },
+    { id = "mime", url = "remote://*", run = "mime.remote", prio = "high" },
+    # Chezmoi managed file highlighting
+    { id = "chezmoi", url = "local://*", run = "chezmoi" },
+    { id = "chezmoi", url = "*/",        run = "chezmoi" },
+]

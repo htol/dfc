@@ -1,0 +1,35 @@
+[user]
+{{- if index . "is_work" }}
+	email = {{ .work_email }}
+	name = {{ .work_name }}
+{{- else }}
+	email = github@h-tol.net
+	name = htol
+{{- end }}
+
+[alias]
+  co = checkout
+  st = status
+  br = branch
+  ci = commit -m
+  ce = !git commit --edit -m\"$(git log --format=%B --reverse HEAD..HEAD@{1})\"
+  cia = commit -a -m
+  lp = log --oneline
+  last = log -1 HEAD --
+  poh = push origin head
+  rc = rebase --continue
+  prom = pull --rebase origin master
+  unastage = reset HEAD --
+  hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+  sshow = "{ git stash show stash^{/$*} -p; }; f"
+  sapply = "!f() { git stash apply stash^{/$*}; }; f"
+[pull]
+  ff = only
+[push]
+  default = current
+[url "git@gitlab.com:"]
+	insteadOf = https://gitlab.com/
+[init]
+	defaultBranch = main
+[fetch]
+	prune = true
