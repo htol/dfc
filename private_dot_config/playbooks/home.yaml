@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  gather_facts: true
+  roles:
+    - role: x1
+      when: ansible_hostname == 'kekw'
+    - lua

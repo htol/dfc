@@ -1,0 +1,17 @@
+config-file = ?optional-config-file
+font-family = ""
+font-family = "Menlo"
+font-family = ""
+font-family = "JetBrainsMono Nerd Font"
+font-family = ""
+font-family = "Meslo LG L"
+font-family = ""
+#font-family = "Iosevka"
+font-size = 15
+
+maximize = true
+
+shell-integration-features = sudo
+macos-option-as-alt = true
+
+#background-opacity = 0.3
