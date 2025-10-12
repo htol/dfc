@@ -14,10 +14,7 @@ function Add-ToPath {
         [string]$Scope
     )
 
-    # Получаем текущие значения PATH (как массив)
     $currentPaths = [System.Environment]::GetEnvironmentVariable("Path", $Scope) -split ";" | Where-Object { $_ -ne "" }
-
-    # Нормализуем для сравнения (убираем лишние \ в конце)
     $normalized = $Path.TrimEnd("\")
     $exists = $currentPaths | ForEach-Object { $_.TrimEnd("\") } | Where-Object { $_ -ieq $normalized }
 
@@ -25,13 +22,9 @@ function Add-ToPath {
         $newPath = ($currentPaths + $Path) -join ";"
         [System.Environment]::SetEnvironmentVariable("Path", $newPath, $Scope)
 
-        # Обновляем переменную PATH в текущей сессии
         $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "User") + ";" + `
                     [System.Environment]::GetEnvironmentVariable("Path", "Machine")
 
-        Write-Host "✅ Добавлено в $Scope PATH: $Path"
-    } else {
-        Write-Host "ℹ️ Путь уже есть в $Scope PATH: $Path"
     }
 }
 
