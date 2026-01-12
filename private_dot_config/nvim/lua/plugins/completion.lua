@@ -2,6 +2,7 @@ return {
   {
     'saghen/blink.cmp',
     dependencies = {
+      "Exafunction/windsurf.nvim",
       'rafamadriz/friendly-snippets',
       'echasnovski/mini.icons',
       -- { 'echasnovski/mini.snippets', version = '*', opts = {} },
@@ -94,7 +95,7 @@ return {
       -- snippets = { preset = 'mini_snippets' },
 
       sources = {
-        default = { 'lazydev', 'lsp', 'path', 'snippets' },
+        default = { 'lazydev', 'lsp', 'path', 'snippets', "buffer" },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
         },

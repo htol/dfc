@@ -234,6 +234,8 @@ return {
         }
       })
       vim.lsp.enable('emmet_ls')
+      vim.lsp.config('css-lsp', {})
+      vim.lsp.enable('css-lsp')
     end, -- config
   },
 }
