@@ -10,12 +10,14 @@ o.showmode = false
 o.ignorecase = true
 o.smartcase = true
 
+o.startofline = false
 
 o.termguicolors = true
 o.guicursor = ""
 
 o.syntax = 'on'
 
+o.laststatus = 3
 
 o.clipboard = "unnamedplus"
 

@@ -23,6 +23,7 @@ map("n", "n", "nzzzv")
 map("n", "N", "Nzzzv")
 map("n", "J", "mzJ`z")
 
+-- copy from cursor position till eol
 map("n", "Y", "y$")
 
 -- Undo breakpoints in insert mode
