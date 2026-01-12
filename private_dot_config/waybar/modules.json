@@ -1,12 +1,12 @@
 {
-    //    "custom/arch": {
-    //        "format": "󰣇",
-    //        "tooltip": true,
-    //        "tooltip-format": "btw"
-    //    },
+    "custom/arch": {
+        "format": "󰣇",
+        "tooltip": true,
+        "tooltip-format": "btw"
+    },
     "tray": {
         "icon-size": 21,
-        "spacing": 10
+        "spacing": 5
     },
     "hyprland/workspaces": {
         "disable-scroll": true,
@@ -56,14 +56,6 @@
         "format-disconnected": "Disconnected ⚠",
         "on-click": "sh ~/scripts/rofi-wifi-menu/rofi-wifi-menu.sh"
     },
-    //"cpu": {
-    //    "format": "  {usage}%",
-    //    "tooltip": true
-    //},
-    //"memory": {
-    //    "format": "  {}%",
-    //"tooltip": true
-    //},
     "temperature": {
         "interval": 10,
         "hwmon-path": "/sys/devices/platform/coretemp.0/hwmon/hwmon4/temp1_input",
@@ -72,7 +64,7 @@
         "format": " {temperatureC}°C"
     },
     "hyprland/language": {
-        "format": "  {}",
+        "format": "{}",
         "format-en": "EN",
         "format-ru": "RU"
     },
@@ -94,11 +86,8 @@
             ""
         ]
     },
-    "battery#bat2": {
-        "bat": "BAT2"
-    },
     "clock": {
-        "format": "{:%H:%M | %e %B} ",
+        "format": "{:%H:%M | %d} ",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "format-alt": "{:%Y-%m-%d}"
     }
