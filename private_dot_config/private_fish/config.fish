@@ -17,7 +17,7 @@ if status is-interactive
     keychain --dir $KEYCHAIN_DIR --agents ssh id_rsa id_ed25519
   end
 
-  set CDPATH . ~/ ~/repos ~/go/src ~/winrepos
+  set CDPATH . ~/ ~/repos ~/go/src ~/winrepos ~/.config
 
 
   begin
@@ -41,3 +41,6 @@ if status is-interactive
 
   alias serveron "ipmitool -H 192.168.55.3 -U ADMIN chassis power on"
 end
+
+# opencode
+fish_add_path /home/tol/.opencode/bin
