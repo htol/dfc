@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Antigravity
+TryExec=/home/tol/repos/Antigravity/antigravity
+Exec=/home/tol/repos/Antigravity/antigravity
+Terminal=false
+Type=Application
+Categories=Development;
