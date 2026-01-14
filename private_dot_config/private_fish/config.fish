@@ -41,6 +41,3 @@ if status is-interactive
 
   alias serveron "ipmitool -H 192.168.55.3 -U ADMIN chassis power on"
 end
-
-# opencode
-fish_add_path /home/tol/.opencode/bin

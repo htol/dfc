@@ -25,4 +25,6 @@ export SDKMAN_DIR="$HOME/.local/sdkman"
 export RUSTUP_HOME="$HOME/.local/rustup"
 export CARGO_HOME="$HOME/.local/cargo"
 
-export PATH="$CARGO_HOME/bin:$HOME/.local/bin:~/bin:$GOPATH/bin:$GOROOT/bin:$FNM_DIR:$PATH"
+export BUN_INSTALL="$HOME/.local/bun"
+
+export PATH="$CARGO_HOME/bin:$HOME/.local/bin:~/bin:$GOPATH/bin:$GOROOT/bin:$FNM_DIR:$BUN_INSTALL/bin:$PATH"

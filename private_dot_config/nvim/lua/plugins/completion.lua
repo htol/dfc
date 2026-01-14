@@ -2,7 +2,6 @@ return {
   {
     'saghen/blink.cmp',
     dependencies = {
-      "Exafunction/windsurf.nvim",
       'rafamadriz/friendly-snippets',
       'echasnovski/mini.icons',
       -- { 'echasnovski/mini.snippets', version = '*', opts = {} },
