@@ -2,11 +2,18 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+# Suppress macOS "default shell is now zsh" warning
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
       *) return;;
 esac
+
+# Prevent loading .bashrc multiple times
+[[ -n "$BASHRC_LOADED" ]] && return
+export BASHRC_LOADED=1
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
@@ -16,7 +23,6 @@ fi
 [[ ! $COMMON_ENV_LOADED ]] &&  source $HOME/.config/common_env
 
 if [ -S "$SSH_AUTH_SOCK" ] && [[ $SSH_AUTH_SOCK != *".ssh/ssh_auth_sock"* ]]; then
-    echo "updating auth sock"
     ln -sf $SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock
 fi
 
@@ -150,9 +156,7 @@ fi
 
 eval "$(fnm env --use-on-cd)"
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="$HOME/.local/sdkman"
-[[ -s "$HOME/.local/sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.local/sdkman/bin/sdkman-init.sh"
+[[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
 
 [[ -s "/usr/share/fzf/shell/key-bindings.bash" ]] && source "/usr/share/fzf/shell/key-bindings.bash"
 

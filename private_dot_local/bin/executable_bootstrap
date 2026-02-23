@@ -102,10 +102,10 @@ install_ansible() {
 
 install_sdkman() {
     echo "== Installing/updating sdkman"
-    if [[ ! -f "${HOME}/.local/sdkman/bin/sdkman-init.sh" ]]; then
-        curl -s "https://get.sdkman.io" | bash
+    if [[ ! -f "${SDKMAN_DIR}/bin/sdkman-init.sh" ]]; then
+        curl -s "https://get.sdkman.io?rcupdate=false" | bash
     else
-        source "${HOME}/.local/sdkman/bin/sdkman-init.sh"
+        source "${SDKMAN_DIR}/bin/sdkman-init.sh"
         sdk selfupdate force
     fi
 }

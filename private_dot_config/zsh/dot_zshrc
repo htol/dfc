@@ -50,8 +50,6 @@ if [ -d "/Applications/Visual Studio Code.app/Contents/Resources/app/bin" ]; the
      export PATH=$PATH:"/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 fi
 
-cd
+[[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="$HOME/.local/sdkman"
-[[ -s "$HOME/.local/sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.local/sdkman/bin/sdkman-init.sh"
+cd
