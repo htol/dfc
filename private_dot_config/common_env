@@ -26,6 +26,7 @@ export FNM_DIR="$HOME/.local/fnm"
 export SDKMAN_DIR="$HOME/.local/sdkman"
 export BUN_INSTALL="$HOME/.local/bun"
 export PROTO_HOME="$HOME/.local/proto"
+export PROTO_CONFIG_MODE=upwards-global
 
 
 export RUSTUP_HOME="$HOME/.local/rustup"
