@@ -96,7 +96,7 @@ fund=false
 ; user-agent=npm/{npm-version} node/{node-version} {platform} {arch} {ci}
 ; read-only=false
 ; rebuild-bundle=true
-{{- if .is_work }}
+{{- if index . "is_work" }}
 {{- $workConfig := include (joinPath .chezmoi.homeDir ".config/work/config.toml") | fromToml }}
 registry={{ $workConfig.npm_registry }}
 {{- else }}

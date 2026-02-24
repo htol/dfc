@@ -21,7 +21,7 @@ fi
 echo "$versions"
 echo ""
 
-{{- if .is_work }}
+{{- if index . "is_work" }}
 {{- $workConfig := include (joinPath .chezmoi.homeDir ".config/work/config.toml") | fromToml }}
 cat <<'WORK_CONFIG'
 # Work configuration
