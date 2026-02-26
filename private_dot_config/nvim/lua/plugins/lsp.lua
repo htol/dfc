@@ -113,6 +113,7 @@ return {
       -- LSP server configs are in after/lsp/<server>.lua
       vim.lsp.enable({
         'gopls',
+        'ts_ls',
         'vue_ls',
         'clangd',
         'rust_analyzer',

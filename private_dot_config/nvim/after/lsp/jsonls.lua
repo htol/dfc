@@ -1,5 +1,5 @@
 return {
-  cmd = { "fnm", "exec", "--using=18", "vscode-json-languageserver" },
+  cmd = { "vscode-json-language-server", "--stdio" },
   commands = {
     Format = {
       function()
