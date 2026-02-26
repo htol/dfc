@@ -13,7 +13,7 @@ esac
 
 # Prevent loading .bashrc multiple times
 [[ -n "$BASHRC_LOADED" ]] && return
-export BASHRC_LOADED=1
+BASHRC_LOADED=1
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
@@ -154,7 +154,7 @@ if command -v keychain 1>/dev/null 2>&1; then
   eval `SHELL=/bin/bash keychain --dir $KEYCHAIN_DIR --eval --agents ssh id_rsa id_ed25519`
 fi
 
-eval "$(fnm env --use-on-cd)"
+command -v fnm &>/dev/null && eval "$(fnm env --use-on-cd)"
 
 [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
 
