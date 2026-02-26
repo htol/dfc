@@ -63,8 +63,10 @@ install_uv() {
 install_proto() {
     echo "== Installing proto"
     curl -fsSL https://moonrepo.dev/install/proto.sh | bash -s -- --no-profile
-    proto install node lts
+    proto install node lts --pin global
+    proto install npm latest --pin global
     proto install bun
+    npm install --global neovim
 }
 
 install_fnm() {
