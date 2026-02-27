@@ -3,7 +3,9 @@ return {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     config = function()
-      require('nvim-treesitter.config').setup {
+      local ok, cfg = pcall(require, 'nvim-treesitter.configs')
+      if not ok then cfg = require('nvim-treesitter.config') end
+      cfg.setup {
         ensure_installed = {
           "go", "python", "rust", "bash", "html", "css", "javascript", "typescript",
           "json", "yaml", "toml", "lua", "vue",
