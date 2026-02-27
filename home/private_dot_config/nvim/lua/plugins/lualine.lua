@@ -23,6 +23,11 @@ return {
         },
         lualine_x = {
           {
+            function() return "chezmoi" end,
+            cond = function() return _G.chezmoi and _G.chezmoi.is_managed() end,
+            color = { fg = "#88c0d0" },
+          },
+          {
             'diagnostics',
             sources = { "nvim_diagnostic" },
             symbols = {
