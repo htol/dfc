@@ -15,7 +15,7 @@
   "modules-right": [
     "tray",
     "idle_inhibitor",
-    "pulseaudio",
+    "wireplumber",
     "temperature",
     "battery",
     "hyprland/language",
