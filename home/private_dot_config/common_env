@@ -33,3 +33,6 @@ export RUSTUP_HOME="$HOME/.local/rustup"
 export CARGO_HOME="$HOME/.local/cargo"
 
 export PATH="$PROTO_HOME/bin:$PROTO_HOME/shims:$CARGO_HOME/bin:$HOME/.local/bin:~/bin:$GOPATH/bin:$GOROOT/bin:$BUN_INSTALL/bin:$PATH"
+
+# Reset system-wide uv config to defaults
+unset UV_PYTHON_BIN_DIR UV_PYTHON_INSTALL_DIR
