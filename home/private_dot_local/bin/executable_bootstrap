@@ -16,7 +16,7 @@ usage() {
     echo "  -r              full refresh (run all installers)"
     echo "  -u <component>  update specific component"
     echo ""
-    echo "Components: neovim, uv, proto, fnm, ansible, sdkman, fisher, chezmoi"
+    echo "Components: neovim, uv, proto, fnm, ansible, sdkman, fisher, chezmoi, yazi"
     exit 0
 }
 
@@ -123,6 +123,22 @@ install_fisher() {
 install_chezmoi() {
     echo "== Installing chezmoi"
     sh -c "$(curl -fsLS get.chezmoi.io/lb)"
+}
+
+install_yazi() {
+    echo "== Installing yazi"
+    local version
+    version=$(curl -s https://api.github.com/repos/sxyazi/yazi/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+    local archive="yazi-x86_64-unknown-linux-musl.zip"
+    rm -rf "${LOCAL}/yazi"
+    mkdir -p "${LOCAL}/yazi"
+    cd "${LOCAL}/yazi"
+    curl -LO "https://github.com/sxyazi/yazi/releases/download/${version}/${archive}"
+    unzip "${archive}"
+    rm "${archive}"
+    ln -sf "${LOCAL}/yazi/yazi-x86_64-unknown-linux-musl/yazi" "${LOCAL}/bin/yazi"
+    ln -sf "${LOCAL}/yazi/yazi-x86_64-unknown-linux-musl/ya" "${LOCAL}/bin/ya"
+    cd "$HOME"
 }
 
 configure_macos() {
@@ -258,6 +274,7 @@ install_all() {
         [[ ! -d "${CONF}/nvim/vim_undodir" ]]                          && mkdir -p "${CONF}/nvim/vim_undodir"
         [[ "$REFRESH" == true || ! -f "${CONF}/fish/functions/fisher.fish" ]] && install_fisher
         [[ "$REFRESH" == true || ! -f "${HOME}/.local/bin/chezmoi" ]] && install_chezmoi
+        [[ "$REFRESH" == true ]] || ! command -v yazi &>/dev/null    && install_yazi
         [[ "$REFRESH" == true ]] && install_sdkman
     fi
 
@@ -282,6 +299,7 @@ if [[ -n "$COMPONENT" ]]; then
         sdkman)  install_sdkman ;;
         fisher)  install_fisher ;;
         chezmoi) install_chezmoi ;;
+        yazi)    install_yazi ;;
         macos)   configure_macos ;;
         *)       echo "Unknown component: $COMPONENT"; usage ;;
     esac
