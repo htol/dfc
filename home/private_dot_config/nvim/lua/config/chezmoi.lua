@@ -33,17 +33,26 @@ _G.chezmoi = {
 
 local function notify(msg, level)
   local hl = level == vim.log.levels.ERROR and "DiagnosticError" or "DiagnosticInfo"
+  local lines = {}
+  for line in (msg .. "\n"):gmatch("(.-)\n") do
+    table.insert(lines, " " .. line .. " ")
+  end
   local buf = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_lines(buf, 0, -1, false, { " " .. msg .. " " })
-  vim.api.nvim_buf_add_highlight(buf, -1, hl, 0, 0, -1)
-  local width = #msg + 2
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+  for i = 0, #lines - 1 do
+    vim.api.nvim_buf_add_highlight(buf, -1, hl, i, 0, -1)
+  end
+  local width = 0
+  for _, l in ipairs(lines) do
+    width = math.max(width, #l)
+  end
   local win = vim.api.nvim_open_win(buf, false, {
     relative = "editor",
     anchor = "SE",
     row = vim.o.lines - 2,
     col = vim.o.columns,
     width = width,
-    height = 1,
+    height = #lines,
     style = "minimal",
     border = "rounded",
     focusable = false,
