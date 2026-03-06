@@ -1,0 +1,38 @@
+# --- Поиск по истории как в Fish ---
+# Начинаешь писать команду, жмешь "Вверх" — и он ищет только совпадения
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+
+# --- Удобство дополнения (Tab) ---
+# Показывать все варианты сразу при первом нажатии Tab, если их много
+set show-all-if-ambiguous on
+
+# Игнорировать регистр (cd down -> cd Downloads)
+set completion-ignore-case on
+
+# Склеивать дополнения, если они начинаются одинаково
+set show-all-if-unmodified on
+
+set bell-style none
+
+set completion-query-items 200
+
+# Добавлять символ типа файла (/, *, @) в списке дополнений
+set visible-stats on
+
+# --- Раскраска (Работает в Readline 8.0+, т.е. CentOS 9) ---
+# Раскрашивать список файлов при дополнении (как ls)
+set colored-stats On
+# Подсвечивать общую часть дополнения
+set colored-completion-prefix On
+
+# --- Навигация ---
+# Ctrl + стрелочки для перемещения по словам
+"\e[1;5C": forward-word
+"\e[1;5D": backward-word
+# Ctrl + Backspace для удаления слова целиком
+"\C-H": backward-kill-word
+
+# --- Фикс для фанатов Fish: Меню выбора ---
+# Второе нажатие Tab начинает циклически перебирать варианты прямо в строке
+TAB: menu-complete
