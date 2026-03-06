@@ -160,4 +160,4 @@ command -v fnm &>/dev/null && eval "$(fnm env --use-on-cd)"
 
 [[ -s "/usr/share/fzf/shell/key-bindings.bash" ]] && source "/usr/share/fzf/shell/key-bindings.bash"
 
-[[ -n $HOME ]] && [[ -s "$HOME/.local_aliases" ]] && source "$HOME/.local_aliases"
+[[ -n $HOME ]] && [[ -s "$HOME/.config/local_aliases" ]] && source "$HOME/.config/local_aliases"
