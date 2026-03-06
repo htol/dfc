@@ -2,6 +2,10 @@
 custom-checks.ps1
 {{ end }}
 
+{{- if not (and .is_work (stat (joinPath .chezmoi.homeDir ".config/work/local_aliases"))) }}
+.config/local_aliases
+{{- end }}
+
 {{- if ne .chezmoi.os "linux" }}
 .config/waybar/**
 .config/hypr/**
