@@ -36,3 +36,5 @@
        defaultRefFormat = files
 [fetch]
 	prune = true
+[http "https://github.com"]
+	sslCAInfo = {{ .chezmoi.homeDir }}/.local/share/mozilla-ca-bundle.pem
