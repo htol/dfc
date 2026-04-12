@@ -29,7 +29,7 @@ if status is-interactive
             set HOSTNAME 'localhost'
         end
         if [ -f /usr/bin/keychain ] && [ -z "$SSH_CLIENT" ] && [ -z "$SSH_TTY" ]
-            keychain --dir $KEYCHAIN_DIR --agents ssh id_rsa id_ed25519
+            keychain --dir $KEYCHAIN_DIR ssh id_rsa id_ed25519
             if test -f $KEYCHAIN_DIR/$HOSTNAME-fish
                 source $KEYCHAIN_DIR/$HOSTNAME-fish
             end
