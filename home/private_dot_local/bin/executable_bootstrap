@@ -278,12 +278,12 @@ install_all() {
 
     if [[ "$system_type" = "Linux" || "$system_type" = "Darwin" ]]; then
         [[ "$REFRESH" == true || ! -f "${HOME}/.local/bin/uv" ]]      && install_uv
+        install_mozilla_ca_bundle
         [[ "$REFRESH" == true || ! -d "${PROTO_HOME}" ]]                && install_proto
         [[ "$REFRESH" == true || ! -d "${LOCAL}/ansible" ]]            && install_ansible
         [[ ! -d "${CONF}/nvim/vim_undodir" ]]                          && mkdir -p "${CONF}/nvim/vim_undodir"
         [[ "$REFRESH" == true || ! -f "${CONF}/fish/functions/fisher.fish" ]] && install_fisher
         [[ "$REFRESH" == true || ! -f "${HOME}/.local/bin/chezmoi" ]] && install_chezmoi
-        install_mozilla_ca_bundle
         [[ "$REFRESH" == true ]] || ! command -v yazi &>/dev/null    && install_yazi
         [[ "$REFRESH" == true ]] && install_sdkman
     fi
