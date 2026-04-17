@@ -43,4 +43,5 @@ if status is-interactive
   end
 
   alias serveron "ipmitool -H 192.168.55.3 -U ADMIN chassis power on"
+  alias lg lazygit
 end

@@ -1,0 +1,11 @@
+{{- if .is_work -}}
+#!/bin/bash
+set -euo pipefail
+
+WORK_DIR="{{ .chezmoi.homeDir }}/.config/work"
+
+if [ -d "$WORK_DIR/.git" ]; then
+    echo "== Updating work config"
+    git -C "$WORK_DIR" pull --ff-only --quiet
+fi
+{{ end -}}
