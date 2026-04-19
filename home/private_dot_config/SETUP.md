@@ -1,18 +1,18 @@
 # TODO:
-Move all this staff to bootstrap  
+Move all this stuff to bootstrap  
 
 # Hello
-Short notes for enviroment setup.
+Short notes for environment setup.
 
-some X related staff
+some X related stuff
 ```
 sudo apt-get -y install rofi nitrogen flameshot kbdd
 # TODO: manual build for
 # polybar picom alacritty ghostty
 ```
 
-# For nvim lsp (optional, depricated)
-Ussualy lsp servers will be installed via Masson
+# For nvim lsp (optional, deprecated)
+Usually lsp servers will be installed via Mason
 All supported lsps
 ```
 go install golang.org/x/tools/gopls@latest  # also for  gopls update
@@ -40,7 +40,7 @@ curl -LO https://download.eclipse.org/jdtls/milestones/1.9.0/jdt-language-server
 
 # sdkman && gradle
 ```
-sudo apt-install -y zip
+sudo apt-get install -y zip
 curl -s "https://get.sdkman.io" | bash
 sdk install gradle
 ```
@@ -58,14 +58,14 @@ git clone https://github.com/ansible/ansible.git ~/.local/ansible
 pip install -r ~/.local/ansible/requirements.txt
 ```
 
-# macosx soft
+# macOS software
 ```
 brew install fish nushell fzf rg fd ghostty visual-studio-code iterm2 vlc sublime-text nvim emacs \
 colima docker golang p7zip htop btop jq bat rectangle netcat tmux nushell scroll-reverser
 ```
 
-# macosx system settings
-Check bootstrap! There is already a banch of setting to configure macosx. Here is only often used.
+# macOS system settings
+Check bootstrap! There is already a bunch of settings to configure macOS. Here is only often used.
 
 Don't create "DS_Store" on remote shares:
 ```
