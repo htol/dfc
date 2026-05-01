@@ -16,7 +16,7 @@ usage() {
     echo "  -r              full refresh (run all installers)"
     echo "  -u <component>  update specific component"
     echo ""
-    echo "Components: neovim, uv, proto, fnm, ansible, sdkman, fisher, chezmoi, yazi, ca-bundle"
+    echo "Components: neovim, uv, mise, npm-packages, ansible, sdkman, fisher, chezmoi, yazi, ca-bundle"
     exit 0
 }
 
@@ -60,38 +60,32 @@ install_uv() {
     "${HOME}/.local/venv/neovim/bin/python3" -m pip install -U pip neovim
 }
 
-install_proto() {
-    echo "== Installing proto"
-    curl -fsSL https://moonrepo.dev/install/proto.sh | bash -s -- --no-profile
-    proto install node lts --pin global
-    proto install npm latest --pin global
-    proto install bun
-    npm install --global neovim
+install_mise() {
+    echo "== Installing mise"
+    curl -fsSL https://mise.run | sh
+    hash -r 2>/dev/null || true
+    mise install
+    install_npm_packages
 }
 
-install_fnm() {
-    # disabled: replaced by proto
-    echo "== [skip] fnm is disabled (use proto instead)"
-    return 0
-
-    echo "== Installing fnm, Node, yarn"
-    export FNM_DIR="${FNM_DIR:-${LOCAL}/fnm}"
-    export PATH=$FNM_DIR:$PATH
-    curl -fsSL https://github.com/Schniz/fnm/raw/master/.ci/install.sh | bash -s -- --skip-shell --install-dir "${LOCAL}/fnm"
-    eval "$(fnm env --shell=bash)"
-    fnm install --lts
-    fnm default lts-latest
+install_npm_packages() {
+    echo "== Installing global npm packages"
     local npm_packages=(
-        npm yarn npx neovim
+        npm
+        yarn
+        npx
+        neovim
         pyright
-        @vue/language-server
         emmet-ls
         yaml-language-server
         vscode-langservers-extracted
         typescript
         typescript-language-server
     )
-    npm install --global "${npm_packages[@]}"
+
+    mise exec -- npm install --global "${npm_packages[@]}"
+    # Keep Vue pinned because the work npm mirror can lag latest transitive deps.
+    mise exec -- npm install --global @vue/language-server@3.1.5
 }
 
 install_ansible() {
@@ -279,12 +273,12 @@ install_all() {
     if [[ "$system_type" = "Linux" || "$system_type" = "Darwin" ]]; then
         [[ "$REFRESH" == true || ! -f "${HOME}/.local/bin/uv" ]]      && install_uv
         install_mozilla_ca_bundle
-        [[ "$REFRESH" == true || ! -d "${PROTO_HOME}" ]]                && install_proto
+        [[ "$REFRESH" == true || ! -x "${HOME}/.local/bin/mise" ]]      && install_mise
         [[ "$REFRESH" == true || ! -d "${LOCAL}/ansible" ]]            && install_ansible
         [[ ! -d "${CONF}/nvim/vim_undodir" ]]                          && mkdir -p "${CONF}/nvim/vim_undodir"
         [[ "$REFRESH" == true || ! -f "${CONF}/fish/functions/fisher.fish" ]] && install_fisher
         [[ "$REFRESH" == true || ! -f "${HOME}/.local/bin/chezmoi" ]] && install_chezmoi
-        [[ "$REFRESH" == true ]] || ! command -v yazi &>/dev/null    && install_yazi
+        [[ "$REFRESH" == true ]] || ! command -v yazi &>/dev/null      && install_yazi
         [[ "$REFRESH" == true ]] && install_sdkman
     fi
 
@@ -303,8 +297,8 @@ if [[ -n "$COMPONENT" ]]; then
     case "$COMPONENT" in
         neovim)  install_neovim ;;
         uv)      install_uv ;;
-        proto)   install_proto ;;
-        fnm)     install_fnm ;;
+        mise)    install_mise ;;
+        npm-packages) install_npm_packages ;;
         ansible) install_ansible ;;
         sdkman)  install_sdkman ;;
         fisher)  install_fisher ;;

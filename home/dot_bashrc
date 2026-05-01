@@ -154,7 +154,9 @@ if command -v keychain 1>/dev/null 2>&1; then
   eval `SHELL=/bin/bash keychain --dir $KEYCHAIN_DIR --eval ssh id_rsa id_ed25519`
 fi
 
-command -v fnm &>/dev/null && eval "$(fnm env --use-on-cd)"
+if command -v mise &>/dev/null; then
+  eval "$(mise activate bash)"
+fi
 
 [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
 

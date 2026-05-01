@@ -1,4 +1,6 @@
 export COMMON_ENV_LOADED=1
+# This file is sourced by multiple shells. Keep it portable: exports only,
+# no shell-specific conditionals, evals, hooks, or functions.
 export EDITOR=nvim
 export TERMINFO=$HOME/.config/terminfo
 
@@ -22,11 +24,9 @@ export KEYCHAIN_DIR="$HOME/.cache/keychain"
 export GOPATH="$HOME/go"
 export GO111MODULE=on
 
-export FNM_DIR="$HOME/.local/fnm"
+export MISE_HOME="$HOME/.local/share/mise"
 export SDKMAN_DIR="$HOME/.local/sdkman"
 export BUN_INSTALL="$HOME/.local/bun"
-export PROTO_HOME="$HOME/.local/proto"
-export PROTO_CONFIG_MODE=upwards-global
 
 export PI_CODING_AGENT_DIR="$HOME/.config/pi/agent"
 
@@ -34,7 +34,7 @@ export PI_CODING_AGENT_DIR="$HOME/.config/pi/agent"
 export RUSTUP_HOME="$HOME/.local/rustup"
 export CARGO_HOME="$HOME/.local/cargo"
 
-export PATH="$HOME/.local/node/bin:$PROTO_HOME/bin:$PROTO_HOME/shims:$CARGO_HOME/bin:$HOME/.local/bin:~/bin:$GOPATH/bin:$GOROOT/bin:$BUN_INSTALL/bin:$PATH"
+export PATH="$HOME/.local/node/bin:$CARGO_HOME/bin:$HOME/.local/bin:~/bin:$GOPATH/bin:$GOROOT/bin:$BUN_INSTALL/bin:$PATH"
 
 # Reset system-wide uv config to defaults
 unset UV_PYTHON_BIN_DIR UV_PYTHON_INSTALL_DIR

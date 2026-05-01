@@ -13,8 +13,8 @@ if status is-interactive
   #   theme_gruvbox dark soft
   # end
 
-  if [ -f $PROTO_HOME/bin/proto ]
-    set -gx PATH "$PROTO_HOME/shims" "$PROTO_HOME/bin" $PATH;
+  if command -q mise
+    mise activate fish | source
   end
 
   set CDPATH . ~/ ~/repos ~/.config
@@ -35,8 +35,6 @@ if status is-interactive
             end
         end
     end
-
-    #fnm env --shell=fish | source
 
   if [ -d "/Applications/Visual Studio Code.app/Contents/Resources/app/bin" ]
     fish_add_path "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
