@@ -57,6 +57,7 @@ return {
         require 'telescope'.load_extension('ui-select')
 
         local builtin = require("telescope.builtin")
+        map("n", "<leader>gs", builtin.git_status, {desc="Git status"})
         map("n", "<leader>uc", function() builtin.colorscheme({ enable_preview = true }) end,
           { noremap = true, silent = true, desc = "Change colorscheme" })
         map("n", "<Leader>ps", function() builtin.grep_string({ search = vim.fn.input("Grep for > ") }) end)

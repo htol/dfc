@@ -4,7 +4,9 @@ function tt
         echo "Commands:"
         echo "  rsync    - rsync with progress bar"
         echo "  pkg      - list and search installed packages"
-        echo "  vea      - activate Python virtual environment"
+        echo "  ps       - list processes with pid, user, and command"
+        echo "  venv     - activate Python virtual environment"
+        echo "  env      - load environment variables from file"
         return 1
     end
 
@@ -20,6 +22,8 @@ function tt
             rsync -avz --progress --info=progress2,name0 $args
         case pkg
             yay -Qq | fzf --preview 'yay -Qil {}' --layout=reverse --bind 'enter:execute(yay -Qil {} | less)'
+        case ps
+            sudo ps -axo pid,user,command
         case venv
             source .venv/bin/activate.fish
         case env
