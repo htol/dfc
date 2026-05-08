@@ -24,3 +24,5 @@ macos-option-as-alt = true
 
 theme = Nord
 keybind = shift+enter=text:\x1b\r
+
+scrollback-limit = 100000000
