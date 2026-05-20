@@ -71,9 +71,8 @@ install_mise() {
 install_npm_packages() {
     echo "== Installing global npm packages"
     local npm_packages=(
-        npm
+        npm@latest
         yarn
-        npx
         neovim
         pyright
         emmet-ls
