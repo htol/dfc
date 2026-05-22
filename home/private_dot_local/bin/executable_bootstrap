@@ -38,10 +38,12 @@ done
 install_neovim() {
     # Downloads both tar.gz and appimage: tar.gz for systems with compatible
     # glibc, appimage (extracted) as fallback when glibc is too old.
+    # Installs to $XDG_DATA_HOME/nvim to match the fish nvim function.
     echo "== Getting neovim build"
-    rm -rf "${LOCAL}/nvim"
-    mkdir -p "${LOCAL}/nvim"
-    cd "${LOCAL}/nvim"
+    local NVIM_DIR="${XDG_DATA_HOME:-${LOCAL}/share}/nvim"
+    rm -rf "${NVIM_DIR}"
+    mkdir -p "${NVIM_DIR}"
+    cd "${NVIM_DIR}"
     local ver="stable"
     curl -LO "https://github.com/neovim/neovim/releases/download/${ver}/nvim-linux-x86_64.tar.gz"
     tar xvfz nvim-linux-x86_64.tar.gz
@@ -80,6 +82,7 @@ install_npm_packages() {
         vscode-langservers-extracted
         typescript
         typescript-language-server
+        @earendil-works/pi-coding-agent
     )
 
     mise exec -- npm install --global "${npm_packages[@]}"
