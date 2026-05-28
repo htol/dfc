@@ -7,6 +7,7 @@ function tt
         echo "  ps       - list processes with pid, user, and command"
         echo "  venv     - activate Python virtual environment"
         echo "  env      - load environment variables from file"
+        echo "  http     - start Python HTTP server"
         return 1
     end
 
@@ -26,6 +27,13 @@ function tt
             sudo ps -axo pid,user,command
         case venv
             source .venv/bin/activate.fish
+        case http
+            set -l port 8080
+            if test (count $args) -ge 1
+                set port $args[1]
+            end
+            echo "Starting HTTP server on port $port in ./"
+            python3 -m http.server $port -d ./
         case env
             # If no file is specified, use .env by default
             set -l env_file $argv[2]
