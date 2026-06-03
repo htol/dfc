@@ -8,6 +8,32 @@ LOCAL="$HOME/.local"
 CONF="$HOME/.config"
 system_type=$(uname -s)
 
+path_without_perl_bins() {
+# some environment puts broken perl path with shasum from perl before system sha256sum
+# sanitazing it
+    local entry
+    local cleaned=""
+    local old_ifs="$IFS"
+
+    IFS=:
+    for entry in $PATH; do
+        case "$entry" in
+            *perl*)
+                continue
+                ;;
+        esac
+
+        if [[ -z "$cleaned" ]]; then
+            cleaned="$entry"
+        else
+            cleaned="${cleaned}:$entry"
+        fi
+    done
+    IFS="$old_ifs"
+
+    printf '%s\n' "$cleaned"
+}
+
 # ---------------------------------------------------------------------------
 # Usage
 # ---------------------------------------------------------------------------
@@ -64,7 +90,10 @@ install_uv() {
 
 install_mise() {
     echo "== Installing mise"
-    curl -fsSL https://mise.run | sh
+    (
+        export PATH="$(path_without_perl_bins)"
+        curl -fsSL https://mise.run | sh
+    )
     hash -r 2>/dev/null || true
     mise install
     install_npm_packages
