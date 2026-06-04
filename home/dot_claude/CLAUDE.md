@@ -8,6 +8,7 @@
 - If hooks fail with missing module errors, use `uv run git commit`.
 - Most user configs are managed by chezmoi (`~/.local/share/chezmoi`). Check and edit there first, then `chezmoi apply <target-file>` (not global apply).
 - Always show todos before any task.
+- For GitLab, Atlassian (Jira/Confluence), Sourcegraph, Glean, and Grafana — always use Toolbox MCP if available (`mcp__Toolbox-Preview__discover_tools` / `mcp__Toolbox-Preview__call_tool`), not WebFetch or CLI fallbacks.
 
 ## ***Tool Usage***
 
