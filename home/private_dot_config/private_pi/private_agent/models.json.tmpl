@@ -1,0 +1,52 @@
+{{- /* Base providers: always available locally */ -}}
+{{- $providers := `
+{
+  "lm-studio": {
+    "baseUrl": "http://localhost:1234/v1",
+    "api": "openai-completions",
+    "apiKey": "lm-studio",
+    "compat": {
+      "supportsDeveloperRole": false,
+      "supportsReasoningEffort": false
+    },
+    "models": [
+      {
+        "id": "openai/gpt-oss-20b",
+        "name": "local-gpt-oss-20b",
+        "reasoning": true,
+        "input": [
+          "text"
+        ],
+        "contextWindow": 64000,
+        "maxTokens": 8192,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0
+        }
+      },
+      {
+        "id": "omnicoder-9bomnicoder-9b",
+        "name": "omnicoder-9bomnicoder-9b",
+        "reasoning": true,
+        "input": [
+          "text"
+        ],
+        "contextWindow": 64000,
+        "maxTokens": 8192
+      }
+    ]
+  }
+}
+` | fromJson -}}
+{{- /* On work machines, merge in additional providers from the work repo */ -}}
+{{- if .is_work -}}
+{{-   $workFile := joinPath .chezmoi.homeDir ".config/work/pi/models.json" -}}
+{{-   if stat $workFile -}}
+{{-     range $k, $v := (include $workFile | fromJson).providers -}}
+{{-       $_ := set $providers $k $v -}}
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{ dict "providers" $providers | toPrettyJson }}

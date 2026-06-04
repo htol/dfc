@@ -17,6 +17,10 @@ import { resolve } from "node:path";
 import { homedir } from "node:os";
 
 const HOME = homedir();
+// chezmoi's own source directory — edits here are source edits, not target
+// dotfiles, so the guard must ignore them (otherwise it tries to `chezmoi add`
+// files that already live inside the source tree).
+const CHEZMOI_SOURCE_ROOT = `${HOME}/.local/share/chezmoi`;
 
 // ---------------------------------------------------------------------------
 // Path helpers
@@ -162,6 +166,8 @@ export default function (pi: ExtensionAPI) {
 
 		const targetPath = resolvePath(rawPath, ctx.cwd);
 		if (!isUnderHome(targetPath)) return undefined;
+		// Ignore writes that already target the chezmoi source tree.
+		if (targetPath.startsWith(CHEZMOI_SOURCE_ROOT + "/")) return undefined;
 
 		const sourcePath = chezmoiSourcePath(targetPath);
 
@@ -191,6 +197,8 @@ export default function (pi: ExtensionAPI) {
 		const targets = extractBashWriteTargets(command, ctx.cwd);
 
 		for (const targetPath of targets) {
+			// Ignore writes that already target the chezmoi source tree.
+			if (targetPath.startsWith(CHEZMOI_SOURCE_ROOT + "/")) continue;
 			const sourcePath = chezmoiSourcePath(targetPath);
 			if (sourcePath) {
 				// Block — can't transparently redirect bash writes
