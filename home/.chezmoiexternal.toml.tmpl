@@ -1,0 +1,8 @@
+{{- if .is_work -}}
+[".config/work"]
+    type = "git-repo"
+    url = "git@gitlab.com:booking-com/personal/anatoly.tsyganenko/dotfiles_config.git"
+    refreshPeriod = "0"
+    [".config/work".pull]
+        args = ["pull", "--ff-only"]
+{{- end -}}
