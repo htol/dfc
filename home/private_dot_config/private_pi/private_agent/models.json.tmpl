@@ -1,43 +1,65 @@
 {{- /* Base providers: always available locally */ -}}
 {{- $providers := `
 {
-  "lm-studio": {
-    "baseUrl": "http://localhost:1234/v1",
-    "api": "openai-completions",
-    "apiKey": "lm-studio",
-    "compat": {
-      "supportsDeveloperRole": false,
-      "supportsReasoningEffort": false
-    },
-    "models": [
-      {
-        "id": "openai/gpt-oss-20b",
-        "name": "local-gpt-oss-20b",
-        "reasoning": true,
-        "input": [
-          "text"
-        ],
-        "contextWindow": 64000,
-        "maxTokens": 8192,
-        "cost": {
-          "input": 0,
-          "output": 0,
-          "cacheRead": 0,
-          "cacheWrite": 0
-        }
-      },
-      {
-        "id": "omnicoder-9bomnicoder-9b",
-        "name": "omnicoder-9bomnicoder-9b",
-        "reasoning": true,
-        "input": [
-          "text"
-        ],
-        "contextWindow": 64000,
-        "maxTokens": 8192
-      }
-    ]
-  }
+            "lm-studio": {
+                "baseUrl": "http://localhost:1234/v1",
+                "api": "openai-completions",
+                "apiKey": "lm-studio",
+                "compat": {
+                    "supportsDeveloperRole": false,
+                    "supportsReasoningEffort": false
+                },
+                "models": [
+                    {
+                        "id": "openai/gpt-oss-20b",
+                        "name": "local-gpt-oss-20b",
+                        "reasoning": true,
+                        "input": [
+                            "text"
+                        ],
+                        "contextWindow": 64000,
+                        "maxTokens": 8192,
+                        "cost": {
+                            "input": 0,
+                            "output": 0,
+                            "cacheRead": 0,
+                            "cacheWrite": 0
+                        }
+                    },
+                    {
+                        "id": "omnicoder-9bomnicoder-9b",
+                        "name": "omnicoder-9bomnicoder-9b",
+                        "reasoning": true,
+                        "input": [
+                            "text"
+                        ],
+                        "contextWindow": 64000,
+                        "maxTokens": 8192
+                    }
+                ]
+            },
+            "zai": {
+                "api": "openai-completions",
+                "apiKey": "$API_ZAI",
+                "baseUrl": "https://api.z.ai/api/coding/paas/v4",
+                "compat": {
+                    "supportsDeveloperRole": false,
+                    "thinkingFormat": "zai"
+                },
+                "models": [
+                    {
+                        "id": "glm-5.1",
+                        "name": "GLM 5.1",
+                        "reasoning": true,
+                        "input": [
+                            "text",
+                            "image"
+                        ],
+                        "contextWindow": 204800,
+                        "maxTokens": 131072
+                    }
+                ]
+            }
 }
 ` | fromJson -}}
 {{- /* On work machines, merge in additional providers from the work repo */ -}}
