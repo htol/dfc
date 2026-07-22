@@ -1,8 +1,9 @@
 [tools]
 node = "24.15.0"
 bun = "1.3.13"
-npm = "latest"
+#npm = "latest" #update via bootstrap -r
 uv = "latest"
 neovim = "latest"
 yazi = "latest"
 chezmoi = "latest"
+lazygit = "latest"
