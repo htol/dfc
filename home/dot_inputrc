@@ -1,3 +1,11 @@
+# --- Force 8-bit clean UTF-8 I/O ---
+# Keep readline in UTF-8 mode even if the shell started before LANG was set
+# (sshd does not forward locale, so LANG is empty at readline init and it
+# would otherwise fall back to the single-byte C defaults).
+set input-meta on
+set output-meta on
+set convert-meta off
+
 # --- Поиск по истории как в Fish ---
 # Начинаешь писать команду, жмешь "Вверх" — и он ищет только совпадения
 "\e[A": history-search-backward
