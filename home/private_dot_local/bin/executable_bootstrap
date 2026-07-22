@@ -84,8 +84,8 @@ install_neovim() {
 install_uv() {
     echo "== Installing uv"
     curl -LsSf https://astral.sh/uv/install.sh | sh
-    uv python install 3.13
-    uv python pin --global 3.13
+    uv python install 3.11
+    uv python pin --global 3.11
     uv venv --clear --no-project --seed "${HOME}/.local/venv/neovim"
     "${HOME}/.local/venv/neovim/bin/python3" -m pip install -U pip neovim
 }
@@ -98,6 +98,8 @@ install_mise() {
     )
     hash -r 2>/dev/null || true
     mise install
+    uv venv --clear --no-project --seed "${HOME}/.local/venv/neovim"
+    "${HOME}/.local/venv/neovim/bin/python3" -m pip install -U pip neovim
     install_npm_packages
 }
 
