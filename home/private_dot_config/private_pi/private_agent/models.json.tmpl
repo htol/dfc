@@ -37,28 +37,6 @@
                         "maxTokens": 8192
                     }
                 ]
-            },
-            "zai": {
-                "api": "openai-completions",
-                "apiKey": "$API_ZAI",
-                "baseUrl": "https://api.z.ai/api/coding/paas/v4",
-                "compat": {
-                    "supportsDeveloperRole": false,
-                    "thinkingFormat": "zai"
-                },
-                "models": [
-                    {
-                        "id": "glm-5.1",
-                        "name": "GLM 5.1",
-                        "reasoning": true,
-                        "input": [
-                            "text",
-                            "image"
-                        ],
-                        "contextWindow": 204800,
-                        "maxTokens": 131072
-                    }
-                ]
             }
 }
 ` | fromJson -}}

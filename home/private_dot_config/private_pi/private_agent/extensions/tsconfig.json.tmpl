@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "moduleResolution": "Bundler",
+        "skipLibCheck": true,
+        "paths": {
+            "@earendil-works/pi-coding-agent": [
+                "{{ .chezmoi.homeDir }}/.local/node/lib/node_modules/@earendil-works/pi-coding-agent"
+            ],
+            "typebox": [
+                "{{ .chezmoi.homeDir }}/.local/node/lib/node_modules/@earendil-works/pi-coding-agent/node_modules/typebox"
+            ],
+            "@earendil-works/pi-ai": [
+                "{{ .chezmoi.homeDir }}/.local/node/lib/node_modules/@earendil-works/pi-coding-agent/node_modules/@earendil-works/pi-ai"
+            ],
+            "@earendil-works/pi-tui": [
+                "{{ .chezmoi.homeDir }}/.local/node/lib/node_modules/@earendil-works/pi-coding-agent/node_modules/@earendil-works/pi-tui"
+            ],
+            "@earendil-works/pi-agent-core": [
+                "{{ .chezmoi.homeDir }}/.local/node/lib/node_modules/@earendil-works/pi-coding-agent/node_modules/@earendil-works/pi-agent-core"
+            ]
+        }
+    }
+}

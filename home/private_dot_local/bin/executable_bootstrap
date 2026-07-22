@@ -42,7 +42,7 @@ usage() {
     echo "  -r              full refresh (run all installers)"
     echo "  -u <component>  update specific component"
     echo ""
-    echo "Components: neovim, uv, mise, npm-packages, ansible, sdkman, fisher, chezmoi, yazi, ca-bundle"
+#    echo "Components: neovim, uv, mise, npm-packages, ansible, sdkman, fisher, chezmoi, yazi, ca-bundle"
     exit 0
 }
 
@@ -61,6 +61,7 @@ done
 # Installers
 # ---------------------------------------------------------------------------
 
+# use mise instead
 install_neovim() {
     # Downloads both tar.gz and appimage: tar.gz for systems with compatible
     # glibc, appimage (extracted) as fallback when glibc is too old.
@@ -79,6 +80,7 @@ install_neovim() {
     cd "$HOME"
 }
 
+# use mise instead
 install_uv() {
     echo "== Installing uv"
     curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -145,6 +147,7 @@ install_fisher() {
     '
 }
 
+# use mise instead
 install_chezmoi() {
     echo "== Installing chezmoi"
     sh -c "$(curl -fsLS get.chezmoi.io/lb)"
@@ -159,6 +162,7 @@ install_mozilla_ca_bundle() {
     fi
 }
 
+# use mise instead
 install_yazi() {
     echo "== Installing yazi"
     local version
@@ -297,19 +301,19 @@ configure_macos() {
 }
 
 install_all() {
-    if [ "$system_type" = "Linux" ]; then
-        [[ "$REFRESH" == true || ! -d "${HOME}/.local/nvim" ]] && install_neovim
-    fi
+#    if [ "$system_type" = "Linux" ]; then
+#        [[ "$REFRESH" == true || ! -d "${HOME}/.local/nvim" ]] && install_neovim
+#    fi
 
     if [[ "$system_type" = "Linux" || "$system_type" = "Darwin" ]]; then
-        [[ "$REFRESH" == true || ! -f "${HOME}/.local/bin/uv" ]]      && install_uv
+#        [[ "$REFRESH" == true || ! -f "${HOME}/.local/bin/uv" ]]      && install_uv
         install_mozilla_ca_bundle
         [[ "$REFRESH" == true || ! -x "${HOME}/.local/bin/mise" ]]      && install_mise
         [[ "$REFRESH" == true || ! -d "${LOCAL}/ansible" ]]            && install_ansible
         [[ ! -d "${CONF}/nvim/vim_undodir" ]]                          && mkdir -p "${CONF}/nvim/vim_undodir"
         [[ "$REFRESH" == true || ! -f "${CONF}/fish/functions/fisher.fish" ]] && install_fisher
-        [[ "$REFRESH" == true || ! -f "${HOME}/.local/bin/chezmoi" ]] && install_chezmoi
-        [[ "$REFRESH" == true ]] || ! command -v yazi &>/dev/null      && install_yazi
+#        [[ "$REFRESH" == true || ! -f "${HOME}/.local/bin/chezmoi" ]] && install_chezmoi
+#        [[ "$REFRESH" == true ]] || ! command -v yazi &>/dev/null      && install_yazi
         [[ "$REFRESH" == true ]] && install_sdkman
     fi
 
@@ -326,9 +330,9 @@ cd "$HOME"
 
 if [[ -n "$COMPONENT" ]]; then
     case "$COMPONENT" in
+        mise)    install_mise ;;
         neovim)  install_neovim ;;
         uv)      install_uv ;;
-        mise)    install_mise ;;
         npm-packages) install_npm_packages ;;
         ansible) install_ansible ;;
         sdkman)  install_sdkman ;;

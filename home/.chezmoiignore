@@ -14,3 +14,7 @@ custom-checks.ps1
 .local/bin/hypr-session-helper.sh
 .local/bin/xrc
 {{- end }}
+
+{{- if or .is_work (ne .chezmoi.os "linux") }}
+.config/MangoHud
+{{- end }}
