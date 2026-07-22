@@ -8,7 +8,8 @@
 - If hooks fail with missing module errors, use `uv run git commit`.
 - Most user configs are managed by chezmoi (`~/.local/share/chezmoi`). Check and edit there first, then `chezmoi apply <target-file>` (not global apply).
 - Always show todos before any task.
-- For GitLab, Atlassian (Jira/Confluence), Sourcegraph, Glean, and Grafana — always use Toolbox MCP if available (`mcp__Toolbox-Preview__discover_tools` / `mcp__Toolbox-Preview__call_tool`), not WebFetch or CLI fallbacks.
+- For GitLab, Atlassian (Jira/Confluence), Sourcegraph, Glean, and Grafana — the ONLY allowed path is Toolbox MCP: call `mcp__Toolbox-Preview__search_tools` to find the tool, then `mcp__Toolbox-Preview__call_tool` to run it. NEVER use `glab`/`gh`/other CLI tools, WebFetch, or curl for these services without asking the user first.
+- All external communication (Jira comments, MR/PR titles/descriptions, Slack messages, commit messages, code comments, docs) MUST be in English, regardless of the language used in chat — unless the user explicitly asks for a different language.
 
 ## ***Tool Usage***
 

@@ -121,6 +121,7 @@ install_npm_packages() {
     mise exec -- npm install --global "${npm_packages[@]}"
     # Keep Vue pinned because the work npm mirror can lag latest transitive deps.
     mise exec -- npm install --global @vue/language-server@3.1.5
+    mise exec -- pi install npm:@ff-labs/pi-fff
 }
 
 install_ansible() {
