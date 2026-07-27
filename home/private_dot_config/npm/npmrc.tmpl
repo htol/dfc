@@ -2,7 +2,6 @@
 cache={{ $home }}/.cache/npm
 prefix={{ $home }}/.local/node
 fund=false
-{{- if index . "is_work" }}
-{{- $workConfig := include (joinPath .chezmoi.homeDir ".config/work/config.toml") | fromToml }}
-registry={{ $workConfig.npm_registry }}
+{{- with (index . "npmrc") }}
+{{ . -}}
 {{- end }}

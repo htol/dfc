@@ -3,6 +3,7 @@
 {{- $work_email := "" -}}
 {{- $work_docker_registry := "" -}}
 {{- $op_password_path := "" -}}
+{{- $npmrc := "" -}}
 
 {{/* Try corporate git repo first */}}
 {{- $work_config_file := joinPath .chezmoi.homeDir ".config/work/config.toml" -}}
@@ -13,6 +14,7 @@
 {{-   $work_email = $work_config.work_email -}}
 {{-   $work_docker_registry = $work_config.work_docker_registry | default "" -}}
 {{-   $op_password_path = $work_config.op_password_path | default "" -}}
+{{-   $npmrc = $work_config.npmrc | default "" -}}
 {{- else if lookPath "op" -}}
 {{/* Fallback to 1Password if op CLI is available */}}
 {{-   $is_work = true -}}
@@ -30,6 +32,9 @@
 {{- end }}
 {{- if $op_password_path }}
     op_password_path = {{ $op_password_path | quote }}
+{{- end }}
+{{- if $npmrc }}
+    npmrc = {{ $npmrc | quote }}
 {{- end }}
 {{- end }}
 
