@@ -28,11 +28,17 @@ if status is-interactive
         else
             set HOSTNAME 'localhost'
         end
+        # keychain: load SSH keys into a persistent ssh-agent.
+        # keychain 3.0+ --eval detects $SHELL and emits fish syntax; older
+        # versions emit sh only, so fall back to the generated <host>-fish file.
         if [ -f /usr/bin/keychain ] && [ -z "$SSH_CLIENT" ] && [ -z "$SSH_TTY" ]
-            keychain --dir $KEYCHAIN_DIR ssh id_rsa id_ed25519
-            if test -f $KEYCHAIN_DIR/$HOSTNAME-fish
+            set -l __kc (keychain --dir $KEYCHAIN_DIR --quiet --eval id_rsa id_ed25519 2>/dev/null)
+            if string match -q 'set -*' -- $__kc
+                eval $__kc
+            else if test -f $KEYCHAIN_DIR/$HOSTNAME-fish
                 source $KEYCHAIN_DIR/$HOSTNAME-fish
             end
+            set -e __kc
         end
     end
 
