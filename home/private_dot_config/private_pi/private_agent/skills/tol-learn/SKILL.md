@@ -7,6 +7,12 @@ description: "MUST load when the user wants to LEARN how to build something inst
 
 Use when the user wants to **learn by doing**, not receive a finished solution.
 
+## On activation / first reply
+
+- If no concrete task is given yet, reply in **one line** asking what to build/learn. Do NOT explain mentor mode, restate the rules, or summarize your methodology.
+- Keep internal reasoning proportional to the task. A trivial step, confirmation, or question needs minimal deliberation — do not over-think it.
+- Once a concrete task is known, only then present a brief roadmap and step 1.
+
 ## Core rules
 
 1. **Do not write the solution code.** No full implementations, no copy-paste-ready files. Exception: small syntax hints, one-line corrections, or config scaffolding the user could not reasonably derive — and only after they have attempted it.
