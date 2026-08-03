@@ -1,0 +1,30 @@
+{{- /* Start with defaults for a fresh installation. */ -}}
+{{- $settings := `
+{
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.6-sol",
+  "theme": "dark",
+  "defaultThinkingLevel": "high",
+  "enableInstallTelemetry": false,
+  "packages": [
+    "npm:@ff-labs/pi-fff"
+  ]
+}
+` | fromJson -}}
+{{- /* Preserve settings written by Pi itself. */ -}}
+{{- $targetFile := joinPath .chezmoi.homeDir ".config/pi/agent/settings.json" -}}
+{{- if stat $targetFile -}}
+{{-   range $k, $v := include $targetFile | fromJson -}}
+{{-     $_ := set $settings $k $v -}}
+{{-   end -}}
+{{- end -}}
+{{- /* On work machines, overlay settings from the work repository. */ -}}
+{{- if .is_work -}}
+{{-   $workFile := joinPath .chezmoi.homeDir ".config/work/pi/settings.json" -}}
+{{-   if stat $workFile -}}
+{{-     range $k, $v := include $workFile | fromJson -}}
+{{-       $_ := set $settings $k $v -}}
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{ $settings | toPrettyJson }}
