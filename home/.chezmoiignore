@@ -6,6 +6,10 @@ custom-checks.ps1
 .config/local_aliases
 {{- end }}
 
+{{- if not (and .is_work (hasKey . "sentry_host") (hasKey . "sentry_keychain_service")) }}
+.local/bin/sentry-mcp
+{{- end }}
+
 {{- if ne .chezmoi.os "linux" }}
 .config/waybar/**
 .config/hypr/**

@@ -1,0 +1,21 @@
+#!/bin/sh
+# Sentry MCP server for the self-hosted instance, for use as a stdio MCP server.
+# Host and keychain service name come from ~/.config/work/config.toml via chezmoi
+# data. The auth token lives in the macOS keychain, never in any config file:
+#   security add-generic-password -a $USER -s "$KEYCHAIN_SERVICE" -D "Sentry auth token" -U -w
+set -eu
+
+SENTRY_HOST={{ .sentry_host | quote }}
+export SENTRY_HOST
+
+KEYCHAIN_SERVICE={{ .sentry_keychain_service | quote }}
+
+if ! SENTRY_ACCESS_TOKEN=$(security find-generic-password -a "$USER" -s "$KEYCHAIN_SERVICE" -w 2>/dev/null); then
+    echo "sentry-mcp: no token in keychain for service '$KEYCHAIN_SERVICE'" >&2
+    echo "sentry-mcp: add one with: security add-generic-password -a \$USER -s $KEYCHAIN_SERVICE -U -w" >&2
+    exit 1
+fi
+export SENTRY_ACCESS_TOKEN
+
+# Seer is SaaS-only; its tools would just fail against a self-hosted instance.
+exec npx -y @sentry/mcp-server@0.37.0 --disable-skills=seer "$@"

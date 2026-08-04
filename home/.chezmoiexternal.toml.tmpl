@@ -1,7 +1,11 @@
-{{- if .is_work -}}
+{{/* URL comes from work_config_repo in ~/.config/work/config.toml; it must not be
+     hardcoded here because origin is a public repo. On a machine where that file
+     does not exist yet, clone it manually first (see its README), then re-run
+     chezmoi init — this external only keeps it up to date afterwards. */}}
+{{- if and .is_work (hasKey . "work_config_repo") -}}
 [".config/work"]
     type = "git-repo"
-    url = "git@gitlab.com:booking-com/personal/anatoly.tsyganenko/dotfiles_config.git"
+    url = {{ .work_config_repo | quote }}
     refreshPeriod = "0"
     [".config/work".pull]
         args = ["--ff-only"]
