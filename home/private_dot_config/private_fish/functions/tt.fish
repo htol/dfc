@@ -3,6 +3,7 @@ function tt
         echo "Usage: tt <command> [args...]"
         echo "Commands:"
         echo "  rsync    - rsync with progress bar"
+        echo "  wl       - select and enter a Git worktree"
         echo "  pkg      - list and search installed packages"
         echo "  ps       - list processes with pid, user, and command"
         echo "  venv     - activate Python virtual environment"
@@ -21,6 +22,57 @@ function tt
                 return 1
             end
             rsync -avz --progress --info=progress2,name0 $args
+        case wl
+            if not type -q fzf
+                echo "Error: fzf is not installed." >&2
+                return 1
+            end
+
+            if not command git rev-parse --git-common-dir >/dev/null 2>&1
+                echo "Error: tt wl must be run inside a Git repository." >&2
+                return 1
+            end
+
+            set -l tab (printf '\t')
+            set -l candidates
+            set -l worktree_path
+            set -l worktree_branch
+
+            for field in (command git worktree list --porcelain -z | string split0)
+                switch $field
+                    case 'worktree *'
+                        set worktree_path (string replace 'worktree ' '' -- $field)
+                        set worktree_branch '(detached)'
+                    case 'branch *'
+                        set worktree_branch (string replace 'branch refs/heads/' '' -- $field)
+                    case bare
+                        set worktree_branch '(bare)'
+                    case ''
+                        if test -n "$worktree_path"; and test -d "$worktree_path"
+                            set -a candidates "$worktree_branch$tab$worktree_path"
+                        end
+                        set worktree_path
+                        set worktree_branch
+                end
+            end
+
+            if test (count $candidates) -eq 0
+                echo "Error: no usable Git worktrees found." >&2
+                return 1
+            end
+
+            set -l selection (printf '%s\n' $candidates | fzf \
+                --delimiter=$tab \
+                --with-nth=1,2 \
+                --layout=reverse \
+                --prompt='Worktree> ')
+
+            if test -z "$selection"
+                return 0
+            end
+
+            set -l selected_fields (string split -m 1 $tab -- $selection)
+            builtin cd -- $selected_fields[2]
         case pkg
             yay -Qq | fzf --preview 'yay -Qil {}' --layout=reverse --bind 'enter:execute(yay -Qil {} | less)'
         case ps

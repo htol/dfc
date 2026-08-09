@@ -18,4 +18,5 @@ fi
 export SENTRY_ACCESS_TOKEN
 
 # Seer is SaaS-only; its tools would just fail against a self-hosted instance.
-exec npx -y @sentry/mcp-server@0.37.0 --disable-skills=seer "$@"
+# Install the pinned server with: npm install -g @sentry/mcp-server@0.37.0
+exec "$HOME/.local/node/bin/sentry-mcp" --disable-skills=seer "$@"
