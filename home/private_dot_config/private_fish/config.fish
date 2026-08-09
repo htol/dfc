@@ -32,7 +32,7 @@ if status is-interactive
         # keychain 3.0+ --eval detects $SHELL and emits fish syntax; older
         # versions emit sh only, so fall back to the generated <host>-fish file.
         if [ -f /usr/bin/keychain ] && [ -z "$SSH_CLIENT" ] && [ -z "$SSH_TTY" ]
-            set -l __kc (keychain --dir $KEYCHAIN_DIR --quiet --eval id_rsa id_ed25519 2>/dev/null)
+            set -l __kc (keychain --dir $KEYCHAIN_DIR --quiet --eval id_rsa id_ed25519)
             if string match -q 'set -*' -- $__kc
                 eval $__kc
             else if test -f $KEYCHAIN_DIR/$HOSTNAME-fish

@@ -72,3 +72,11 @@ Don't create "DS_Store" on remote shares:
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool TRUE
 defaults read com.apple.desktopservices # check current policy
 ```
+
+# Known issues
+
+## Ghostty: middle-click paste from PRIMARY does nothing on Wayland
+
+```
+gsettings set org.gnome.desktop.interface gtk-enable-primary-paste true
+```
