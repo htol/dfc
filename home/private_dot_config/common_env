@@ -28,7 +28,10 @@ export MISE_HOME="$HOME/.local/share/mise"
 export SDKMAN_DIR="$HOME/.local/sdkman"
 export BUN_INSTALL="$HOME/.local/bun"
 
+# Coding agents: none of them follow XDG on their own, but each has its own knob.
 export PI_CODING_AGENT_DIR="$HOME/.config/pi/agent"
+export CODEX_HOME="$HOME/.config/codex"
+export CLAUDE_CONFIG_DIR="$HOME/.config/claude"
 
 
 export RUSTUP_HOME="$HOME/.local/rustup"
