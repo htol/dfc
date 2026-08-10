@@ -1,0 +1,20 @@
+#!/bin/bash
+# Publish a whitelist of variables from ~/.config/common_env into the launchd GUI
+# session, so applications started from Dock/Finder/Spotlight inherit them.
+# GUI apps do not read shell rc files; without this they fall back to the vendor
+# defaults (~/.codex, ~/.claude, ~/.pi) instead of the XDG-ish paths.
+#
+# Run at login by ~/Library/LaunchAgents/local.common-env.plist.
+# Values land in the session environment visible to every process: no secrets here.
+# No -u: common_env is sourced as-is and references variables that may be unset
+# (e.g. GOROOT inside PATH), which would abort the whole script.
+set -eo pipefail
+
+# shellcheck source=/dev/null
+. "$HOME/.config/common_env"
+
+for var in CODEX_HOME CLAUDE_CONFIG_DIR PI_CODING_AGENT_DIR EDITOR; do
+    value="${!var:-}"
+    [[ -n "$value" ]] || { echo "skip $var: not set in common_env" >&2; continue; }
+    launchctl setenv "$var" "$value"
+done
