@@ -3,7 +3,8 @@
 Single source of truth for all coding agents. `$CLAUDE_CONFIG_DIR/CLAUDE.md`,
 `$CODEX_HOME/AGENTS.md` and `$PI_CODING_AGENT_DIR/AGENTS.md` are symlinks to this file; those three
 variables are exported from `~/.config/common_env` and point into `~/.config`. This file is managed
-by chezmoi at `home/dot_agents/AGENTS.md` — edit there and run `chezmoi apply ~/.agents/AGENTS.md`.
+by chezmoi at `home/dot_agents/AGENTS.md.tmpl` — edit there and run `chezmoi apply
+~/.agents/AGENTS.md`.
 
 Every section below states obligations, except `## Preferences`, which does not.
 
@@ -24,8 +25,9 @@ Every section below states obligations, except `## Preferences`, which does not.
   `chezmoi managed` and `chezmoi diff <target>`.
 - The chezmoi repository has a PUBLIC remote (`origin` = `github.com/htol/dfc`). NEVER put
   work-related values in it — no internal hostnames, URLs, emails, registries, project or service
-  names. Anything work-related goes in as a `.tmpl` gated on `.is_work`, with the actual values in
-  `~/.config/work/config.toml` (a separate internal repo), wired into `[data]` via
+  names. Anything work-related goes in as a `.tmpl` gated on `.is_work`, with scalar values in
+  `~/.config/work/config.toml` and Work-only agent instructions in
+  `~/.config/work/agents/AGENTS.md.part` (a separate internal repo), wired into `[data]` via
   `home/.chezmoi.toml.tmpl` and gated in `home/.chezmoiignore`. After editing `.chezmoi.toml.tmpl`,
   run `chezmoi init` to regenerate `~/.config/chezmoi/chezmoi.toml`, then `chezmoi apply
   <target-file>`. Before writing to the chezmoi repository, grep the rendered text for internal
@@ -110,3 +112,6 @@ Every section below states obligations, except `## Preferences`, which does not.
   Install new shared skills there, not into an agent-specific directory.
 - Codex and pi discover that directory natively at user level. Claude Code only reads
   `~/.claude/skills`, where the installer maintains one symlink per skill.
+{{ if and .is_work (hasKey . "work_agents_md") }}
+{{ .work_agents_md -}}
+{{ end -}}

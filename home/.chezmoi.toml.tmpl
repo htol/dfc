@@ -7,6 +7,7 @@
 {{- $npmrc := "" -}}
 {{- $sentry_host := "" -}}
 {{- $sentry_keychain_service := "" -}}
+{{- $work_agents_md := "" -}}
 
 {{/* Try corporate git repo first */}}
 {{- $work_config_file := joinPath .chezmoi.homeDir ".config/work/config.toml" -}}
@@ -26,6 +27,13 @@
 {{-   $is_work = true -}}
 {{-   $work_name = onepasswordRead "op://Employee/Work Config/name" -}}
 {{-   $work_email = onepasswordRead "op://Employee/Work Config/email" -}}
+{{- end -}}
+
+{{- if $is_work -}}
+{{-   $work_agents_file := joinPath .chezmoi.homeDir ".config/work/agents/AGENTS.md.part" -}}
+{{-   if stat $work_agents_file -}}
+{{-     $work_agents_md = include $work_agents_file -}}
+{{-   end -}}
 {{- end -}}
 
 [data]
@@ -50,6 +58,9 @@
 {{- end }}
 {{- if $sentry_keychain_service }}
     sentry_keychain_service = {{ $sentry_keychain_service | quote }}
+{{- end }}
+{{- if $work_agents_md }}
+    work_agents_md = {{ $work_agents_md | quote }}
 {{- end }}
 {{- end }}
 
