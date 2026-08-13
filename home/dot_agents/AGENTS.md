@@ -5,11 +5,17 @@ Single source of truth for all coding agents. `$CLAUDE_CONFIG_DIR/CLAUDE.md`,
 variables are exported from `~/.config/common_env` and point into `~/.config`. This file is managed
 by chezmoi at `home/dot_agents/AGENTS.md` — edit there and run `chezmoi apply ~/.agents/AGENTS.md`.
 
+Every section below states obligations, except `## Preferences`, which does not.
+
 ## MUST DO
 
 - Prefer `uv` to run Python scripts in virtual environments. Install required dependencies there.
 - If a direct Python call is required, use `python3`.
 - Do not run `git commit` or `git push` unless directly asked.
+- When asked to commit: one commit per logical change, with nothing unrelated staged. Rebase onto a
+  fresh default branch before pushing. Follow the repository's existing branch-name and
+  commit-message convention, including any ticket prefix, and check the message against the repo's
+  own lint rules rather than assuming it will pass CI.
 - If `.pre-commit-config.yaml` exists, ensure hooks are installed (`pre-commit install`).
 - Never skip Git hooks (`--no-verify`).
 - If hooks fail with missing-module errors, use `uv run git commit`.
@@ -23,20 +29,67 @@ by chezmoi at `home/dot_agents/AGENTS.md` — edit there and run `chezmoi apply 
   `home/.chezmoi.toml.tmpl` and gated in `home/.chezmoiignore`. After editing `.chezmoi.toml.tmpl`,
   run `chezmoi init` to regenerate `~/.config/chezmoi/chezmoi.toml`, then `chezmoi apply
   <target-file>`. Before writing to the chezmoi repository, grep the rendered text for internal
-  identifiers; if unsure whether something counts as work-related, ask.
+  identifiers and show that grep and its output — reading the diff is not that check. If unsure
+  whether something counts as work-related, ask before writing, not after.
 - Secrets never go into config files, dotfiles, or shell environment files. On macOS use Keychain
   (`security add-generic-password ... -w` with `-w` last, so it prompts and stays out of shell
   history and `ps`) and read them at runtime from a wrapper script. Let the user enter the secret
   themselves — never ask for a token's value in chat.
-- Always show TODOs before any task.
+- A credential value must never enter your output: not in a command you run, not in output you
+  elicit, not in a quoted diff or log. To check whether a token exists or is valid, test it
+  indirectly — exit code, length, `--dry-run` — never by rendering it. A leaked value is rotated,
+  not deleted from the log.
 - For GitLab, Atlassian (Jira/Confluence), Sourcegraph, Glean and Grafana, the ONLY allowed path is
   Toolbox MCP: discover the tool first, then call it. NEVER use `glab`/`gh`/other CLI tools, web
   fetching, or `curl` for these services without asking the user first.
 - All external communication (Jira comments, MR/PR titles and descriptions, Slack messages, commit
   messages, code comments, docs) MUST be in English, regardless of the language used in chat —
-  unless the user explicitly asks for a different language.
+  unless the user explicitly asks for a different language. Keep it short: state the decision and
+  the reason, and leave out session narration, status updates and anything the reader can see for
+  themselves.
 
-## Tool usage
+## Scope
+
+- Before the first edit, list the files you will change and why. Anything not on that list ends the
+  turn and asks — another module, an unrelated manifest, a neighbouring config included.
+- No drive-by work, including inside a file that is legitimately on that list: no opportunistic
+  refactors, renames, dependency bumps, reformatting, or removal of code you were not asked about
+  (qualifiers like `final`, comments, guards, existing tests).
+- "Simplify this", "why is this here?" and "that looks like too much" are never requests to add
+  code. They are requests to remove.
+- A question is a question. When asked how something works, where something lives, or whether an
+  approach is sound, answer it and stop. Do not start editing, committing or pushing on the
+  strength of a question.
+- Never overwrite or replace an existing config, dotfile or lockfile in place: show the diff and end
+  the turn. Agreement to a change is not agreement to its text, however obvious the improvement.
+- Leave no residue. Temp files, scratch directories, extra git worktrees, throwaway commits and
+  branches are cleaned up in the same turn that created them.
+
+## Verification
+
+- Any claim that something works, was applied, restarted or is fixed carries the command and the
+  output that shows it. No output, no claim — instead, name what you did not verify.
+- State as fact only what you have actually read or executed this session. Everything else is a
+  hypothesis and must be labelled as one. Never describe a tool call you did not make, and never
+  call a weaker check by the name of the check that was asked for.
+- A stated cause names the `file:line` or the log line it was read from; without that it is a
+  hypothesis and is labelled as one. Do not offer another thing to try when the previous attempt was
+  never explained.
+- When a command yields no output, an empty result or a network failure, suspect the sandbox or an
+  expired token before concluding the resource does not exist. Say which of the two you think it is
+  and ask, rather than reporting the resource as absent.
+- Re-read what the user already supplied — hosts, commands, URLs, examples, earlier answers —
+  before asking for it again or going looking for it.
+
+## Code and tests
+
+- Smallest change that solves the problem. If you introduce a new term, layer, indirection or
+  dependency, name it and say why in the same message.
+- Do not log expected non-events ("nothing to do", "no items needed processing").
+- Follow the test style already present in the repository. Prefer its real fixtures and helpers
+  over mocks. Do not add tests that assert nothing, and do not apply TDD to Puppet manifests.
+
+## Preferences
 
 - Prefer the harness's dedicated file and search tools over shell equivalents whenever one fits:
   read files with the read tool rather than `cat`/`head`/`tail`/`sed`, locate files with the
@@ -48,9 +101,10 @@ by chezmoi at `home/dot_agents/AGENTS.md` — edit there and run `chezmoi apply 
   separate sequential calls are practical — they do not match individual command permissions and
   trigger extra prompts.
 - If a shell command unexpectedly triggers a permission prompt, flag it and suggest a narrowly
-  scoped update to this file or to the agent's permission settings to prevent it in the future.
+  scoped update to the agent's permission settings — a permission-matcher problem belongs there,
+  not in this file.
 
-## Skills
+## Reference: skills
 
 - Shared skills live in `~/.agents/skills` (installer-managed, see `~/.agents/.skill-lock.json`).
   Install new shared skills there, not into an agent-specific directory.
