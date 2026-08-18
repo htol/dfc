@@ -23,7 +23,6 @@ macos-option-as-alt = true
 #background-opacity = 0.3
 
 theme = Nord
-keybind = shift+enter=text:\x1b\r
 
 # paste from CLIPBOARD (not PRIMARY) on Shift+Insert
 keybind = shift+insert=paste_from_clipboard
