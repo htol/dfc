@@ -41,6 +41,13 @@ Every section below states obligations, except `## Preferences`, which does not.
   elicit, not in a quoted diff or log. To check whether a token exists or is valid, test it
   indirectly — exit code, length, `--dry-run` — never by rendering it. A leaked value is rotated,
   not deleted from the log.
+- Never render the full contents of secret-bearing files (`.env`, `*.env`, `*.pem`, `netrc`,
+  `credentials`): no `cat`, no whole-file reads, no unanchored `grep`, no diffs of them. Assume a
+  local `.env` may contain secrets even when the committed `.env.example` shows none. If a task
+  needs one variable, extract only that variable (`grep '^VAR=' .env`).
+- Private data — hostnames, internal URLs, IPs, absolute paths under `$HOME`, emails, credentials
+  — never goes into a repository with a public remote. Before committing to one, grep the staged
+  diff for such values and show that grep and its output; reading the diff is not that check.
 - For GitLab, Atlassian (Jira/Confluence), Sourcegraph, Glean and Grafana, the ONLY allowed path is
   Toolbox MCP: discover the tool first, then call it. NEVER use `glab`/`gh`/other CLI tools, web
   fetching, or `curl` for these services without asking the user first.
