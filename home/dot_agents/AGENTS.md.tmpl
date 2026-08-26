@@ -17,6 +17,8 @@ Every section below states obligations, except `## Preferences`, which does not.
   fresh default branch before pushing. Follow the repository's existing branch-name and
   commit-message convention, including any ticket prefix, and check the message against the repo's
   own lint rules rather than assuming it will pass CI.
+- A branch name never contains a ticket identifier, whatever the other branches in the repository
+  look like. The ticket belongs in the commit message and the MR title only.
 - If `.pre-commit-config.yaml` exists, ensure hooks are installed (`pre-commit install`).
 - Never skip Git hooks (`--no-verify`).
 - If hooks fail with missing-module errors, use `uv run git commit`.
@@ -73,6 +75,11 @@ Every section below states obligations, except `## Preferences`, which does not.
   the turn. Agreement to a change is not agreement to its text, however obvious the improvement.
 - Leave no residue. Temp files, scratch directories, extra git worktrees, throwaway commits and
   branches are cleaned up in the same turn that created them.
+- A document written for someone who will execute it — runbook, procedure, ops doc — contains only
+  what that person needs to decide a step or read an output. Research findings, backlog, scope
+  fencing, test plans, provenance and history do not belong there, however hard they were to obtain:
+  they go into the ticket, the MR description or a separate document. Do not carry the structure of
+  your own investigation into the deliverable.
 
 ## Verification
 

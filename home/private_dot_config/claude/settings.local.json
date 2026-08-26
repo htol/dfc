@@ -39,7 +39,7 @@
       "WebFetch(domain:gitlab.com)",
       "WebFetch(domain:developer.1password.com)",
       "WebFetch(domain:www.chezmoi.io)",
-      "mcp__Toolbox-Preview__*",
+      "mcp__Fabric__*",
       "Read(~/.local/share/chezmoi/**)",
       "Bash(brew info *)",
       "Bash(brew deps *)",
