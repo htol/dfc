@@ -19,11 +19,9 @@
     "temperature",
     "battery",
     "hyprland/language",
-    "clock",
-    "custom/hyprwhspr"
+    "clock"
   ],
   "include": [
-    "~/.config/waybar/modules.json",
-    "~/.config/waybar/hyprwhspr-module.jsonc"
+    "~/.config/waybar/modules.json"
   ]
 }
