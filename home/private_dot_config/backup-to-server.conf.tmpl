@@ -1,0 +1,55 @@
+# backup-to-server configuration, rendered by chezmoi.
+# Parsed by ~/.local/bin/backup-to-server: the 'repo=' line plus restic
+# exclude patterns below the 'excludes:' marker. The server name comes from
+# chezmoi data (backup_server, sourced from ~/.config/personal/config.toml,
+# local-only). Home-anchored paths use .chezmoi.homeDir.
+{{ if .backup_server -}}
+repo=sftp:{{ .backup_server }}:{{ .chezmoi.homeDir }}/!backups/restic/moon
+{{- else -}}
+# no repo= line rendered: set backup_server in ~/.config/personal/config.toml
+{{- end }}
+
+# restic exclude patterns: every non-comment line below this marker.
+excludes:
+# regenerable dependency/build dirs, anywhere in the tree
+node_modules
+.venv
+venv
+target
+dist
+__pycache__
+# top-level heavy dirs: games, VM images, SDKs, caches
+{{ .chezmoi.homeDir }}/vm
+{{ .chezmoi.homeDir }}/go
+{{ .chezmoi.homeDir }}/fvm
+{{ .chezmoi.homeDir }}/.android
+{{ .chezmoi.homeDir }}/.cache
+{{ .chezmoi.homeDir }}/.gradle
+{{ .chezmoi.homeDir }}/.npm
+{{ .chezmoi.homeDir }}/.bun
+{{ .chezmoi.homeDir }}/.nv
+{{ .chezmoi.homeDir }}/.lmstudio
+{{ .chezmoi.homeDir }}/.java
+{{ .chezmoi.homeDir }}/.javacpp
+{{ .chezmoi.homeDir }}/.skiko
+{{ .chezmoi.homeDir }}/.oracle_jre_usage
+# ~/.local/share: games, tool caches, system noise
+{{ .chezmoi.homeDir }}/.local/share/Steam
+{{ .chezmoi.homeDir }}/.local/share/PrismLauncher
+{{ .chezmoi.homeDir }}/.local/share/lutris
+{{ .chezmoi.homeDir }}/.local/share/umu
+{{ .chezmoi.homeDir }}/.local/share/wineprefixes
+{{ .chezmoi.homeDir }}/.local/share/BeamNG
+{{ .chezmoi.homeDir }}/.local/share/Larian Studios
+{{ .chezmoi.homeDir }}/.local/share/Terraria
+{{ .chezmoi.homeDir }}/.local/share/SHENZHEN IO
+{{ .chezmoi.homeDir }}/.local/share/pywhispercpp
+{{ .chezmoi.homeDir }}/.local/share/mise
+{{ .chezmoi.homeDir }}/.local/share/zed
+{{ .chezmoi.homeDir }}/.local/share/nvim
+{{ .chezmoi.homeDir }}/.local/share/uv
+{{ .chezmoi.homeDir }}/.local/share/opencode
+{{ .chezmoi.homeDir }}/.local/share/kilo
+{{ .chezmoi.homeDir }}/.local/share/goose
+{{ .chezmoi.homeDir }}/.local/share/Trash
+{{ .chezmoi.homeDir }}/.local/share/baloo

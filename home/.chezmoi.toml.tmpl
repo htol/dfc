@@ -8,6 +8,7 @@
 {{- $sentry_host := "" -}}
 {{- $sentry_keychain_service := "" -}}
 {{- $work_agents_md := "" -}}
+{{- $backup_server := "" -}}
 
 {{/* Try corporate git repo first */}}
 {{- $work_config_file := joinPath .chezmoi.homeDir ".config/work/config.toml" -}}
@@ -36,8 +37,18 @@
 {{-   end -}}
 {{- end -}}
 
+{{/* Personal backup server host; value is local-only (~/.config/personal/config.toml) */}}
+{{- $personal_config_file := joinPath .chezmoi.homeDir ".config" "personal" "config.toml" -}}
+{{- if stat $personal_config_file -}}
+{{-   $personal_config := include $personal_config_file | fromToml -}}
+{{-   $backup_server = $personal_config.backup_server | default "" -}}
+{{- end -}}
+
 [data]
     is_work = {{ $is_work }}
+{{- if $backup_server }}
+    backup_server = {{ $backup_server | quote }}
+{{- end }}
 {{- if $is_work }}
 {{- if $work_config_repo }}
     work_config_repo = {{ $work_config_repo | quote }}

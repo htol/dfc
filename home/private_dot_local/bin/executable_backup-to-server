@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+# Manual restic backup of this workstation to the backup server.
+#
+# All configuration lives in a single file: ~/.config/backup-to-server.conf
+#   repo=sftp:host:/path   repository location (untracked on purpose: it
+#                          contains the server address)
+#   excludes:              marker; every non-comment line below it is a
+#                          restic exclude pattern
+# restic prompts for the repository password on every run; keep that password
+# in a password manager — losing it loses the whole repository.
+#
+# Usage:
+#   backup-to-server [backup]        snapshot + prune (default)
+#   backup-to-server init            create the remote repository (run once)
+#   backup-to-server snapshots       list snapshots
+#   backup-to-server check [...]     restic check (add e.g. --read-data)
+#   backup-to-server restore [...]   restic restore (args passed through)
+
+set -euo pipefail
+
+conf="${XDG_CONFIG_HOME:-$HOME/.config}/backup-to-server.conf"
+excludes_file="$(mktemp)"
+trap 'rm -f "$excludes_file"' EXIT
+
+repo=""
+in_excludes=0
+while IFS= read -r line || [[ -n "$line" ]]; do
+    case "$line" in
+        '' | '#'*) continue ;;
+        excludes:*) in_excludes=1 ;;
+        repo=*) repo="${line#repo=}" ;;
+        *)
+            if ((in_excludes)); then
+                printf '%s\n' "$line" >>"$excludes_file"
+            fi
+            ;;
+    esac
+done <"$conf"
+
+if [[ -z "$repo" ]]; then
+    echo "backup-to-server: no 'repo=' line found in $conf" >&2
+    exit 1
+fi
+export RESTIC_REPOSITORY="${RESTIC_REPOSITORY:-$repo}"
+
+cmd="${1:-backup}"
+shift || true
+
+case "$cmd" in
+    init)
+        restic init "$@"
+        ;;
+    backup)
+        restic backup "$HOME" --exclude-file "$excludes_file" "$@"
+        restic forget --prune --keep-daily 7 --keep-weekly 4 --keep-monthly 6
+        restic snapshots --latest 5 --compact
+        ;;
+    snapshots | snap | ls)
+        restic snapshots "$@"
+        ;;
+    check)
+        restic check "$@"
+        ;;
+    restore)
+        restic restore "$@"
+        ;;
+    *)
+        echo "usage: backup-to-server [backup|init|snapshots|check|restore ...]" >&2
+        exit 2
+        ;;
+esac
