@@ -1,4 +1,4 @@
---- @since 25.12.29
+--- @since 26.8
 
 local should_refresh = ya.sync(function(st)
 	local now = ya.time()
@@ -128,13 +128,25 @@ end
 
 --- @type UnstableFetcher
 local function fetch(_, job)
-	if not should_refresh() then return false end
-	local ok, err = do_refresh()
-	done_refresh(ok)
-	if not ok then
-		return true, Err("chezmoi plugin: %s", tostring(err))
-	end
-	return false
+	return ya.co(function()
+		if not should_refresh() then
+			for _, file in ipairs(job.files) do
+				coroutine.yield(file, { retry = false })
+			end
+			return
+		end
+
+		local ok, err = do_refresh()
+		done_refresh(ok)
+
+		for _, file in ipairs(job.files) do
+			if ok then
+				coroutine.yield(file, { retry = false })
+			else
+				coroutine.yield(file, { retry = true, error = Err("chezmoi plugin: %s", tostring(err)) })
+			end
+		end
+	end)
 end
 
 local function entry(_, job)
