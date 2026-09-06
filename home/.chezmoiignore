@@ -30,3 +30,8 @@ Library/**
 {{- if or .is_work (ne .chezmoi.os "linux") }}
 .config/MangoHud
 {{- end }}
+
+{{- if ne .chezmoi.hostname "moon" }}
+.config/wireplumber/**
+.local/share/easyeffects/**
+{{- end }}
