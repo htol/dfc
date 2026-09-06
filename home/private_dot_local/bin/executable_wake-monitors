@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# Wake up monitors (DPMS on) in the KDE Plasma Wayland session.
+# kscreen-doctor aborts when XDG_SESSION_TYPE is unset (e.g. from a tty),
+# so force it to "wayland" here.
+export XDG_SESSION_TYPE=wayland
+
+exec kscreen-doctor --dpms on
