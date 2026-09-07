@@ -41,7 +41,9 @@
 {{- $personal_config_file := joinPath .chezmoi.homeDir ".config" "personal" "config.toml" -}}
 {{- if stat $personal_config_file -}}
 {{-   $personal_config := include $personal_config_file | fromToml -}}
-{{-   $backup_server = $personal_config.backup_server | default "" -}}
+{{-   if hasKey $personal_config "backup_server" -}}
+{{-     $backup_server = $personal_config.backup_server | default "" -}}
+{{-   end -}}
 {{- end -}}
 
 [data]

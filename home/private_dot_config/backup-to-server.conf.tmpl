@@ -3,8 +3,12 @@
 # exclude patterns below the 'excludes:' marker. The server name comes from
 # chezmoi data (backup_server, sourced from ~/.config/personal/config.toml,
 # local-only). Home-anchored paths use .chezmoi.homeDir.
-{{ if .backup_server -}}
-repo=sftp:{{ .backup_server }}:{{ .chezmoi.homeDir }}/!backups/restic/moon
+{{ $backup_server := "" -}}
+{{- if hasKey . "backup_server" -}}
+{{-   $backup_server = .backup_server -}}
+{{- end -}}
+{{ if $backup_server -}}
+repo=sftp:{{ $backup_server }}:{{ .chezmoi.homeDir }}/!backups/restic/moon
 {{- else -}}
 # no repo= line rendered: set backup_server in ~/.config/personal/config.toml
 {{- end }}
