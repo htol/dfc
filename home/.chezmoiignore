@@ -32,6 +32,8 @@ Library/**
 {{- end }}
 
 {{- if ne .chezmoi.hostname "moon" }}
+.config/backup-to-server.conf
 .config/wireplumber/**
+.local/bin/wake-monitors
 .local/share/easyeffects/**
 {{- end }}
