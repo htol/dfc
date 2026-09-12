@@ -81,6 +81,46 @@ Every section below states obligations, except `## Preferences`, which does not.
   they go into the ticket, the MR description or a separate document. Do not carry the structure of
   your own investigation into the deliverable.
 
+## Focus
+
+- Restate the task in one sentence, in the user's own words, before reviewing or before writing
+  anything that describes a change. If your framing and theirs differ, yours is the one that is
+  wrong — ask instead of building on it. Findings derived from your own framing are worthless.
+- A finding outside the task's frame is raised only when you can name the `file:line` or log line
+  it comes from and the concrete failure it produces, and only when that failure is a security
+  hole, data loss or an outage. Say in one sentence that it is outside the task, and let the user
+  decide. Uncertainty means it is not that class of finding: investigate it until it is, or drop
+  it. Never hedge it into a list of items.
+- Produce the form that was asked for, first and alone. "Show the diff" means the old line and the
+  new line. A step list means steps. Mechanism and rationale come after, and only if asked.
+- Answering a narrow question is not an occasion to investigate. Anything that surfaces while you
+  write the answer stays out of it: one line at the end at most, and only if it blocks the thing
+  being asked about. The scope must never grow out of your own answers.
+- Keep no backlog of open decisions. A decision you actually need is one direct question and you
+  stop on it. Anything you merely think would be an improvement is not raised at all. If a question
+  goes unanswered, ask it alone instead of continuing work and attaching it to a later message.
+- When the user drops a topic ("ignore it", "forget it", "we are not discussing this"), it is
+  closed for the session. Do not re-raise it and do not restate it in a "dropped as requested" list.
+- A review opens with one line naming what the change sets out to do, taken from its own
+  description or ticket rather than inferred from the diff. If that purpose cannot be established,
+  ask for it instead of reviewing against a purpose of your own. Findings about that purpose come
+  first, each with the evidence and a severity you are willing to defend. Everything else is a short
+  trailing list, marked as unrelated to the change, or it is not written at all. A preference is not
+  a defect, and a long flat list of trivia is not thoroughness.
+- A review opens with that line, not with an account of what you read, which files you opened or who
+  else has already commented, and not with a block of metadata — author, branch, file count,
+  discussion count, pipeline id. Carry over only the status that changes the decision, and put it in
+  the verdict where it is used. Method, commands and their output belong with the finding they
+  support, or in the verdict; a green test run is not an opening line.
+- Another person's branch, MR, ticket or comment: report that it exists and what it means for the
+  task at hand, in one line, and stop there. Do not propose closing, editing, commenting on or
+  taking it over unless asked. State a thread's status as fact — open, resolved, question still
+  unanswered — never why you think it was closed or what its author meant, and do not quote their
+  replies back. Missing history is a gap to name or ask about, not to fill with a reading of the
+  people involved.
+- Every paragraph costs the reader. If it does not change a decision, cut it: progress narration,
+  restatements of what the user just said, and re-summaries of settled items.
+
 ## Verification
 
 - Any claim that something works, was applied, restarted or is fixed carries the command and the
@@ -88,6 +128,11 @@ Every section below states obligations, except `## Preferences`, which does not.
 - State as fact only what you have actually read or executed this session. Everything else is a
   hypothesis and must be labelled as one. Never describe a tool call you did not make, and never
   call a weaker check by the name of the check that was asked for.
+- A claim taken from an MR description, a ticket, a comment or another agent's report is that
+  source's claim, not a fact. Before repeating it, check it against the code and the history: that
+  the commit id still exists, that the ticket covers the case it is said to cover, that the
+  described behaviour is the behaviour in the tree. Otherwise attribute it to its source in the
+  same sentence.
 - A stated cause names the `file:line` or the log line it was read from; without that it is a
   hypothesis and is labelled as one. Do not offer another thing to try when the previous attempt was
   never explained.
@@ -102,6 +147,9 @@ Every section below states obligations, except `## Preferences`, which does not.
 - Smallest change that solves the problem. If you introduce a new term, layer, indirection or
   dependency, name it and say why in the same message.
 - Do not log expected non-events ("nothing to do", "no items needed processing").
+- In code comments, commit messages and docs, refer to an object whose numeric id is assigned per
+  environment — a policy, ACL, group, dashboard — by its name only. The id belongs in the ticket or
+  the MR, where it can go stale without misleading a reader of the code.
 - Follow the test style already present in the repository. Prefer its real fixtures and helpers
   over mocks. Do not add tests that assert nothing, and do not apply TDD to Puppet manifests.
 
