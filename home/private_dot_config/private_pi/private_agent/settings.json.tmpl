@@ -6,8 +6,17 @@
   "theme": "dark",
   "defaultThinkingLevel": "high",
   "enableInstallTelemetry": false,
+  "steeringMode": "all",
+  "tuiMode": "fullscreen",
   "packages": [
-    "npm:@ff-labs/pi-fff"
+    "npm:@ff-labs/pi-fff",
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "npm:pi-worktrees",
+    "npm:pi-subagents",
+    "npm:pi-mcp-adapter",
+    "npm:@carlosgtrz/pi-run-timer",
+    "npm:@pi-unipi/notify",
+    "npm:pi-tps-meter"
   ]
 }
 ` | fromJson -}}
@@ -27,4 +36,4 @@
 {{-     end -}}
 {{-   end -}}
 {{- end -}}
-{{ $settings | toPrettyJson }}
+{{- $settings | toPrettyJson | trimSuffix "\n" -}}
