@@ -68,6 +68,23 @@ map("n", "<leader>pa", function()
   vim.fn.setreg("+", path)
 end, {desc="Copy full file path"})
 
+-- Neovide GUI zoom. g:neovide is set via RPC only after init.lua, so the
+-- gate has to live in UIEnter; in the terminal the block never runs.
+local neovide_base_scale = 1.6
+vim.api.nvim_create_autocmd("UIEnter", {
+  once = true,
+  callback = function()
+    if not vim.g.neovide then return end
+    local function change_scale_factor(delta)
+      vim.g.neovide_scale_factor = (vim.g.neovide_scale_factor or neovide_base_scale) + delta
+    end
+    vim.g.neovide_scale_factor = neovide_base_scale
+    map("n", "<C-=>", function() change_scale_factor(0.1) end, { desc = "Zoom in (Neovide)" })
+    map("n", "<C-->", function() change_scale_factor(-0.1) end, { desc = "Zoom out (Neovide)" })
+    map("n", "<C-0>", function() vim.g.neovide_scale_factor = neovide_base_scale end, { desc = "Reset zoom (Neovide)" })
+  end,
+})
+
 -- In WSL copy to windows clipboard via clip.exe
 -- TODO: implement in lua
 --func! GetSelectedText()
