@@ -13,6 +13,7 @@ o.smartcase = true
 o.startofline = false
 
 o.termguicolors = true
+o.background = "dark" -- nord.nvim falls back to its light palette when unset (e.g. in Neovide, where 'background' is not detected)
 o.guicursor = ""
 
 o.syntax = 'on'
