@@ -53,6 +53,9 @@ Every section below states obligations, except `## Preferences`, which does not.
 - For GitLab, Atlassian (Jira/Confluence), Sourcegraph, Glean and Grafana, the ONLY allowed path is
   Toolbox MCP: discover the tool first, then call it. NEVER use `glab`/`gh`/other CLI tools, web
   fetching, or `curl` for these services without asking the user first.
+- File paths in output are written relative to the session's working directory or
+  absolute — never shortened or anchored to another root. The terminal linkifies
+  resolvable paths automatically; hand-made file:// links are not needed.
 - All external communication (Jira comments, MR/PR titles and descriptions, Slack messages, commit
   messages, code comments, docs) MUST be in English, regardless of the language used in chat —
   unless the user explicitly asks for a different language. Keep it short: state the decision and
