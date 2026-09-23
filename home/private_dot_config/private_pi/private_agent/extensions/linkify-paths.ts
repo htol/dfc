@@ -8,11 +8,12 @@
  * Rules:
  * - candidates are absolute paths, ~/ ./ ../ prefixed paths, and relative
  *   paths containing a slash; they linkify only when they resolve to an
- *   existing file under the session cwd (or absolutely)
+ *   existing file or directory under the session cwd (or absolutely)
  * - a relative path that does not resolve directly falls back to a suffix
  *   search: `rg --files` under the session cwd, and the path linkifies only
- *   when exactly one listed file ends with "/<path>" — an ambiguous or
- *   missing match stays plain text rather than link somewhere wrong
+ *   when exactly one listed file — or one directory derived from the
+ *   listing's parent paths — ends with "/<path>"; an ambiguous or missing
+ *   match stays plain text rather than link somewhere wrong
  * - inline code spans that contain exactly such a path also become links —
  *   models habitually wrap paths in backticks; fenced code blocks and other
  *   code content stay untouched
@@ -142,22 +143,23 @@ export default function (pi: ExtensionAPI) {
     // against the session cwd, and returns a markdown link (the line stays in
     // the label — the file:// scheme cannot carry it). A relative path that
     // does not resolve directly gets one suffix-search chance (see header);
-    // returns null when nothing resolves uniquely to an existing file.
+    // returns null when nothing resolves uniquely to an existing path.
     function buildLink(text: string): string | null {
         let path = text;
         const lineMatch = path.match(/:\d+(?:-\d+)?$/);
         if (lineMatch) path = path.slice(0, -lineMatch[0].length);
         let absolute = toAbsolute(path);
-        if (!isFile(absolute)) {
+        if (!exists(absolute)) {
             absolute = findUniqueBySuffix(path) ?? "";
             if (!absolute) return null;
         }
         return `[${text}](${pathToFileURL(absolute).href})`;
     }
 
-    function isFile(p: string): boolean {
+    function exists(p: string): boolean {
         try {
-            return statSync(p).isFile();
+            statSync(p);
+            return true;
         } catch {
             return false;
         }
@@ -166,7 +168,8 @@ export default function (pi: ExtensionAPI) {
     // Deep fallback for plain relative paths (no ~, /, . prefixes, no ".."
     // segments): list files under the session cwd via `rg --files` (respects
     // .gitignore, skips hidden files) and return the absolute path when
-    // exactly one listed file ends with "/<path>". Any failure — rg missing,
+    // exactly one listed file — or one directory derived from the listing's
+    // parent paths — ends with "/<path>". Any failure — rg missing,
     // timeout, no or multiple matches — returns null (no link).
     function findUniqueBySuffix(path: string): string | null {
         const segs = path.split("/");
@@ -187,7 +190,22 @@ export default function (pi: ExtensionAPI) {
         }
         const needle = `/${path}`;
         const hits = files.filter((f) => f.endsWith(needle));
-        return hits.length === 1 ? resolve(cwd, hits[0]) : null;
+        if (hits.length > 1) return null;
+        // `rg --files` never lists directories; derive them from the parents
+        // of listed files and pool them with file hits under the same
+        // unique-suffix rule — a file and a directory both matching count as
+        // ambiguous.
+        const dirHits = new Set<string>();
+        for (const f of files) {
+            let slash = f.lastIndexOf("/");
+            while (slash > 0) {
+                const dir = f.slice(0, slash);
+                if (dir.endsWith(needle)) dirHits.add(dir);
+                slash = dir.lastIndexOf("/");
+            }
+        }
+        if (hits.length + dirHits.size !== 1) return null;
+        return resolve(cwd, hits[0] ?? [...dirHits][0]);
     }
 
     function toAbsolute(p: string): string {
