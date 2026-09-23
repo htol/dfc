@@ -16,6 +16,10 @@
  * - inline code spans that contain exactly such a path also become links —
  *   models habitually wrap paths in backticks; fenced code blocks and other
  *   code content stay untouched
+ * - bare http(s) URLs become links the same way: in prose and as exact
+ *   inline-code spans. Trailing sentence punctuation and unbalanced closing
+ *   brackets stay outside the link; existing markdown links and
+ *   <https://…> autolinks are skipped
  * - existing markdown links are skipped
  * - a trailing :line or :line-range stays in the link label only — the
  *   file:// scheme cannot carry a line number
@@ -48,6 +52,10 @@ const PATH_RE = new RegExp(
 );
 // Inline code spans are matched whole, so no lookaround is needed.
 const CODE_PATH_RE = new RegExp(`^${PATH_CORE}$`);
+// Bare web URLs: http(s) scheme plus everything up to whitespace or `<`. The
+// lookbehind leaves markdown autolinks (<https://…>) to the renderer.
+const URL_RE = /(?<!<)\bhttps?:\/\/[^\s<]+/g;
+const CODE_URL_RE = /^https?:\/\/[^\s<]+$/;
 
 export default function (pi: ExtensionAPI) {
     let cwd = process.cwd();
@@ -67,20 +75,67 @@ export default function (pi: ExtensionAPI) {
         // Markdown links and fenced code blocks pass through untouched.
         if (!chunk.startsWith("`") || chunk.startsWith("```")) return chunk;
         const inner = chunk.slice(1, -1);
-        if (!CODE_PATH_RE.test(inner)) return chunk;
-        return buildLink(inner) ?? chunk;
+        if (CODE_PATH_RE.test(inner)) return buildLink(inner) ?? chunk;
+        if (CODE_URL_RE.test(inner)) {
+            const [core, trailing] = splitUrlTrailing(inner);
+            return buildUrlLink(core, trailing) ?? chunk;
+        }
+        return chunk;
     }
 
     function linkify(text: string): string {
-        return text.replace(PATH_RE, (match) => {
-            let trailing = "";
-            const stripped = match.replace(/\.+$/, (dots) => {
-                trailing = dots;
-                return "";
+        return text
+            .replace(URL_RE, (match) => {
+                const [core, trailing] = splitUrlTrailing(match);
+                return buildUrlLink(core, trailing) ?? match;
+            })
+            .replace(PATH_RE, (match) => {
+                let trailing = "";
+                const stripped = match.replace(/\.+$/, (dots) => {
+                    trailing = dots;
+                    return "";
+                });
+                const link = buildLink(stripped);
+                return link === null ? match : link + trailing;
             });
-            const link = buildLink(stripped);
-            return link === null ? match : link + trailing;
-        });
+    }
+
+    // Wraps a URL in a markdown link. Parens are percent-encoded in the
+    // target only — a raw `)` would close the markdown link early — while
+    // the label keeps the original text. Returns null when nothing is left
+    // of the host after trailing-punctuation stripping.
+    function buildUrlLink(url: string, trailing: string): string | null {
+        const scheme = url.slice(0, url.indexOf("//"));
+        if (url.length <= scheme.length + 2) return null;
+        const href = url.replace(/[()]/g, (c) => (c === "(" ? "%28" : "%29"));
+        return `[${url}](${href})${trailing}`;
+    }
+
+    // Splits sentence-final punctuation off a URL match so it stays outside
+    // the link: `.` `,` `;` `:` `!` `?` quotes and `*` (bold wrapping) are
+    // always trailing; `)` `]` `}` are trailing only while they outnumber
+    // their openers inside the URL — wiki-style paths keep balanced parens.
+    function splitUrlTrailing(url: string): [string, string] {
+        let core = url;
+        let trailing = "";
+        const openers: Record<string, string> = { ")": "(", "]": "[", "}": "{" };
+        while (core) {
+            const c = core[core.length - 1];
+            if (".,;:!?'\"*".includes(c)) {
+                core = core.slice(0, -1);
+                trailing = c + trailing;
+            } else if (openers[c] && count(core, c) > count(core, openers[c])) {
+                core = core.slice(0, -1);
+                trailing = c + trailing;
+            } else {
+                break;
+            }
+        }
+        return [core, trailing];
+    }
+
+    function count(s: string, ch: string): number {
+        return s.split(ch).length - 1;
     }
 
     // Splits a trailing :line or :line-range off `text`, resolves the path
