@@ -19,7 +19,6 @@ Every section below states obligations, except `## Preferences`, which does not.
   own lint rules rather than assuming it will pass CI.
 - A branch name never contains a ticket identifier, whatever the other branches in the repository
   look like. The ticket belongs in the commit message and the MR title only.
-- If `.pre-commit-config.yaml` exists, ensure hooks are installed (`pre-commit install`).
 - Never skip Git hooks (`--no-verify`).
 - If hooks fail with missing-module errors, use `uv run git commit`.
 - Most user configs are managed by chezmoi (`~/.local/share/chezmoi`). Check and edit there first,
