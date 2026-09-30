@@ -1,0 +1,9 @@
+{{- /* chezmoi:modify-template */ -}}
+{{- /* Merge into the existing settings: Claude Code writes to this file itself. */ -}}
+{{- $settings := dict -}}
+{{- if .chezmoi.stdin | trim -}}
+{{-   $settings = fromJson .chezmoi.stdin -}}
+{{- end -}}
+{{- $settings = setValueAtPath "attribution.commit" "" $settings -}}
+{{- $settings = setValueAtPath "attribution.pr" "" $settings -}}
+{{- toPrettyJson "  " $settings -}}
