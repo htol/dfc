@@ -23,6 +23,7 @@ Library/**
 .config/hypr/**
 .config/i3/**
 .config/wofi/**
+.local/bin/hypr-moonlight-submap.py
 .local/bin/hypr-session-helper.sh
 .local/bin/xrc
 {{- end }}
