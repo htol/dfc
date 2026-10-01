@@ -13,8 +13,14 @@ hl.config({
 ---- MONITORS ----
 ------------------
 
--- Machine-local, not managed by chezmoi
-pcall(require, "monitors")
+-- Shared across machines: match external monitors by description, not by
+-- connector, so a rule never applies to whatever is plugged into that port
+-- on another machine.
+-- See https://wiki.hypr.land/Configuring/Basics/Monitors/
+hl.monitor({ output = "desc:GIGA-BYTE TECHNOLOGY CO. LTD. Gigabyte M32U 23061B001939", mode = "3840x2160@120", position = "0x0", scale = 1 })
+hl.monitor({ output = "desc:Acer Technologies XB271HU T4TEE0098512", mode = "2560x1440@59.95", position = "3840x0", scale = 1 })
+hl.monitor({ output = "", mode = "preferred", position = "auto", scale = "auto" })
+hl.monitor({ output = "eDP-1", mode = "preferred", position = "auto", scale = 1.0 })
 
 ---------------------
 ---- MY PROGRAMS ----
