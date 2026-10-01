@@ -65,7 +65,7 @@ def current_class() -> str:
 def set_submap(window_class: str) -> None:
     action = "stream" if MOONLIGHT_CLASS.match(window_class) else "reset"
     debug(f"{window_class!r} -> {action}")
-    hyprctl("submap", action)
+    hyprctl(f'hl.dsp.submap("{action}")')
 
 
 def main() -> None:
