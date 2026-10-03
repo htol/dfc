@@ -74,8 +74,14 @@ Every section below states obligations, except `## Preferences`, which does not.
   strength of a question.
 - Never overwrite or replace an existing config, dotfile or lockfile in place: show the diff and end
   the turn. Agreement to a change is not agreement to its text, however obvious the improvement.
-- Leave no residue. Temp files, scratch directories, extra git worktrees, throwaway commits and
-  branches are cleaned up in the same turn that created them.
+- Leave no residue in the repository, the home directory or the system: temp files, scratch
+  directories, extra git worktrees, throwaway commits and branches created there are removed in
+  the same turn that created them.
+- The session scratch directory is the exception: downloads, builds and test data that a
+  follow-up is likely to need stay there until the task is closed. While anything is kept, end the
+  turn with one line saying what is kept, where, and its size. Remove it when the user closes the
+  task or asks to.
+- Processes are never kept: anything started for a check is stopped in the same turn.
 - A document written for someone who will execute it — runbook, procedure, ops doc — contains only
   what that person needs to decide a step or read an output. Research findings, backlog, scope
   fencing, test plans, provenance and history do not belong there, however hard they were to obtain:
