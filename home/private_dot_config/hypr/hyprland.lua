@@ -323,6 +323,13 @@ hl.window_rule({
 })
 
 hl.window_rule({
+    -- Moonlight recreates its window on reconnect; keep it on its own workspace without switching there
+    name  = "moonlight-workspace",
+    match = { class = "^com\\.moonlight_stream\\.Moonlight$" },
+    workspace = "3 silent",
+})
+
+hl.window_rule({
     -- Fix some dragging issues with XWayland
     name  = "fix-xwayland-drags",
     match = {
