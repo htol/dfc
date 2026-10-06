@@ -17,6 +17,8 @@ Every section below states obligations, except `## Preferences`, which does not.
   fresh default branch before pushing. Follow the repository's existing branch-name and
   commit-message convention, including any ticket prefix, and check the message against the repo's
   own lint rules rather than assuming it will pass CI.
+- A ticket key appears once, in the commit subject and the MR title. Never repeat it in the commit
+  body or the MR description — no `Jira:`, `Refs:` or `Ticket:` lines.
 - A branch name never contains a ticket identifier, whatever the other branches in the repository
   look like. The ticket belongs in the commit message and the MR title only.
 - Never skip Git hooks (`--no-verify`).
