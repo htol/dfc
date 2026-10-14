@@ -183,6 +183,24 @@ def format_context(context_data):
         return f" 🧠 \033[32m{used_pct}% {progress_bar}\033[0m"
 
 
+def read_cost_cache():
+    """Return the cached "$spent/cap" string, or "" if missing."""
+    try:
+        return Path("/tmp/claude-cost-cache").read_text().strip()
+    except OSError:
+        return ""
+
+
+def format_session_cost(cost_data):
+    """Return the client-side session cost as "$X.XX", or "" if unavailable."""
+    if not isinstance(cost_data, dict):
+        return ""
+    usd = cost_data.get("total_cost_usd")
+    if not isinstance(usd, (int, float)):
+        return ""
+    return f"${usd:.2f}"
+
+
 def main():
     """Build and output the status line."""
 
@@ -223,6 +241,12 @@ def main():
 
         # Build and output status line
         status_line = f"{display_path} {git_info} {model_info} {context_info}".strip()
+        cost = read_cost_cache()
+        if cost:
+            status_line += f" | {cost}"
+            session = format_session_cost(input_data.get("cost"))
+            if session:
+                status_line += f" ({session})"
 
         if debug:
             with open("/tmp/statusline_debug.log", "a") as f:
