@@ -243,7 +243,7 @@ def main():
         status_line = f"{display_path} {git_info} {model_info} {context_info}".strip()
         cost = read_cost_cache()
         if cost:
-            status_line += f" | {cost}"
+            status_line += f" 💰 {cost}"
             session = format_session_cost(input_data.get("cost"))
             if session:
                 status_line += f" ({session})"
