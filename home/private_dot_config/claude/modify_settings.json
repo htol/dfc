@@ -6,4 +6,32 @@
 {{- end -}}
 {{- $settings = setValueAtPath "attribution.commit" "" $settings -}}
 {{- $settings = setValueAtPath "attribution.pr" "" $settings -}}
+{{- /* On work machines, append hooks from the work repository unless their command is already present. */ -}}
+{{- if .is_work -}}
+{{-   $workFile := joinPath .chezmoi.homeDir ".config/work/claude/settings.json" -}}
+{{-   if stat $workFile -}}
+{{-     range $event, $groups := dig "hooks" dict (include $workFile | fromJson) -}}
+{{-       $current := dig "hooks" $event list $settings -}}
+{{-       $seen := dict -}}
+{{-       range $current -}}
+{{-         range .hooks -}}
+{{-           $_ := set $seen .command true -}}
+{{-         end -}}
+{{-       end -}}
+{{-       $merged := $current -}}
+{{-       range $groups -}}
+{{-         $isNew := false -}}
+{{-         range .hooks -}}
+{{-           if not (hasKey $seen .command) -}}
+{{-             $isNew = true -}}
+{{-           end -}}
+{{-         end -}}
+{{-         if $isNew -}}
+{{-           $merged = append $merged . -}}
+{{-         end -}}
+{{-       end -}}
+{{-       $settings = setValueAtPath (printf "hooks.%s" $event) $merged $settings -}}
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
 {{- toPrettyJson "  " $settings -}}

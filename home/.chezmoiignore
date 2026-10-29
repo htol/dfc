@@ -14,6 +14,10 @@ custom-checks.ps1
 .config/pi/agent/extensions/ssh/**
 {{- end }}
 
+{{- if not (and .is_work (stat (joinPath .chezmoi.homeDir ".config/work/claude/hooks/cost-cache.sh"))) }}
+.config/claude/hooks/cost-cache.sh
+{{- end }}
+
 {{- if ne .chezmoi.os "darwin" }}
 Library/**
 {{- end }}
