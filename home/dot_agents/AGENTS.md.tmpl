@@ -101,6 +101,8 @@ Every section below states obligations, except `## Preferences`, which does not.
   outage and you can name where you read it: say in one line that it is outside the task and let
   the user decide. Anything else is not written at all. A preference is not a defect, and a flat
   list of trivia is not thoroughness.
+- That bound applies to code around the change, not to the change itself: a bug in code you are
+  writing for the task is always in scope.
 - Produce the form that was asked for, first and alone: "show the diff" means the old line and the
   new line, a step list means steps. Do not open with what you read, who else has commented, or a
   block of metadata — author, branch, file count, discussion count, pipeline id; commands and their
@@ -142,14 +144,16 @@ Every section below states obligations, except `## Preferences`, which does not.
 
 ## Code and tests
 
-- Smallest change that solves the problem. If you introduce a new term, layer, indirection or
-  dependency, name it and say why in the same message.
+- Smallest change that solves the problem. Smallest means scope, not care: logic you introduce is
+  yours to get right at its edges. If you introduce a new term, layer, indirection or dependency,
+  name it and say why in the same message.
 - Do not log expected non-events ("nothing to do", "no items needed processing").
 - In code comments, commit messages and docs, refer to an object whose numeric id is assigned per
   environment — a policy, ACL, group, dashboard — by its name only. The id belongs in the ticket or
   the MR, where it can go stale without misleading a reader of the code.
 - Follow the test style already present in the repository. Prefer its real fixtures and helpers
-  over mocks. Do not add tests that assert nothing, and do not apply TDD to Puppet manifests.
+  over mocks. Where the repository has none, that is not a reason to leave new logic unexercised.
+  Do not add tests that assert nothing, and do not apply TDD to Puppet manifests.
 
 ## Preferences
 
