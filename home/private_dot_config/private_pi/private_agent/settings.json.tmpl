@@ -35,4 +35,9 @@
 {{-     end -}}
 {{-   end -}}
 {{- end -}}
-{{- $settings | toPrettyJson | trimSuffix "\n" -}}
+{{- /* If the result matches the target, keep Pi's own key order. */ -}}
+{{- if and (stat $targetFile) (eq ($settings | toJson) (include $targetFile | fromJson | toJson)) -}}
+{{-   include $targetFile -}}
+{{- else -}}
+{{-   $settings | toPrettyJson | trimSuffix "\n" -}}
+{{- end -}}
