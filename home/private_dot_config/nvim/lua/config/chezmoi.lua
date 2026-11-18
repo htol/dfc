@@ -69,7 +69,10 @@ _G.chezmoi = {
 }
 
 local function notify(msg, level)
-  local hl = level == vim.log.levels.ERROR and "DiagnosticError" or "DiagnosticInfo"
+  local hl = ({
+    [vim.log.levels.ERROR] = "DiagnosticError",
+    [vim.log.levels.WARN] = "DiagnosticWarn",
+  })[level] or "DiagnosticInfo"
   local lines = {}
   for line in (msg .. "\n"):gmatch("(.-)\n") do
     table.insert(lines, " " .. line .. " ")
@@ -202,3 +205,60 @@ vim.api.nvim_create_user_command("ChezmoiRefresh", function()
   create_apply_autocmd()
   notify("Chezmoi cache refreshed")
 end, {})
+
+-- Render the current source file as chezmoi would write it to the target.
+-- Unsaved edits of a .tmpl are rendered from the buffer; otherwise the saved source is used.
+-- Returns the output, the target path and an optional warning about an inexact render.
+local function render_target(buf)
+  local file = normalize(vim.api.nvim_buf_get_name(buf))
+  if not is_source_path(file) then return nil, "Not a chezmoi source file" end
+
+  local target = vim.trim(vim.fn.system({ "chezmoi", "target-path", file }))
+  if vim.v.shell_error ~= 0 then return nil, target end
+
+  local out, warning
+  if vim.bo[buf].modified and file:match("%.tmpl$") then
+    local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+    out = vim.fn.system({ "chezmoi", "execute-template" }, lines)
+    -- execute-template knows nothing about the file it renders.
+    if vim.fs.basename(file):match("^modify_") then
+      warning = "Unsaved modify_ template: showing the rendered script, not the target. Save for the real result."
+    elseif table.concat(lines, "\n"):find("%.chezmoi%.sourceFile") or table.concat(lines, "\n"):find("%.chezmoi%.targetFile") then
+      warning = "Unsaved template uses .chezmoi.sourceFile/.chezmoi.targetFile, which are wrong here. Save for the real result."
+    end
+  else
+    out = vim.fn.system({ "chezmoi", "cat", target })
+  end
+  if vim.v.shell_error ~= 0 then return nil, vim.trim(out) end
+  return out, target, warning
+end
+
+vim.api.nvim_create_user_command("ChezmoiPreview", function()
+  local out, target, warning = render_target(vim.api.nvim_get_current_buf())
+  if not out then
+    notify("chezmoi preview failed: " .. target, vim.log.levels.ERROR)
+    return
+  end
+  if warning then notify(warning, vim.log.levels.WARN) end
+
+  local name = "chezmoi://" .. target
+  local buf = vim.fn.bufnr(name)
+  if buf == -1 then
+    buf = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_buf_set_name(buf, name)
+    vim.bo[buf].bufhidden = "wipe"
+  end
+
+  local lines = vim.split(out, "\n", { plain = true })
+  if lines[#lines] == "" then table.remove(lines) end
+  vim.bo[buf].modifiable = true
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+  vim.bo[buf].modifiable = false
+  vim.bo[buf].filetype = vim.filetype.match({ filename = target }) or ""
+
+  if vim.fn.bufwinid(buf) == -1 then
+    vim.cmd("vsplit")
+    vim.api.nvim_win_set_buf(0, buf)
+    vim.cmd("wincmd p")
+  end
+end, { desc = "Show the rendered chezmoi target of the current source file" })
