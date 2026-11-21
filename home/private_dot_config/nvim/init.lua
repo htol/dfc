@@ -1,7 +1,6 @@
 require('globals')
 require('options')
 require('config.lazy')
-require('config.chezmoi')
 require('keybindings')
 
 vim.api.nvim_create_autocmd("TextYankPost", {

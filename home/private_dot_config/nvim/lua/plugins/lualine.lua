@@ -24,7 +24,7 @@ return {
         lualine_x = {
           {
             function() return "chezmoi" end,
-            cond = function() return _G.chezmoi and _G.chezmoi.is_managed() end,
+            cond = function() return require('chezmoi').is_managed(0) end,
             color = { fg = "#88c0d0" },
           },
           {
