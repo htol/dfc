@@ -1,0 +1,19 @@
+{
+  "featureFlags": {},
+  "profile": "custom",
+  "delivery": "skills",
+  "telemetry": {
+    "noticeSeen": true,
+    "enabled": false
+  },
+  "completionTipSeen": true,
+  "workflows": [
+    "propose",
+    "explore",
+    "apply",
+    "update",
+    "sync",
+    "archive",
+    "verify"
+  ]
+}
